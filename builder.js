@@ -15,7 +15,7 @@ for (_file of files) {
     const outputHtml = _file.replace('index.md', 'index.html');
     const output = execSync(`npx github-markdown ${_file}`, { encoding: 'utf-8' })
 
-    fs.writeFileSync(outputHtml, header + prettify(output) + footer);
+    fs.writeFileSync(outputHtml, header + output + footer);
 }
 
 
