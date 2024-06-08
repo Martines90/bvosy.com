@@ -3,7 +3,8 @@
     "build": "node builder.js"
   },
   "devDependencies": {
-    "markdown-to-html": "^0.0.13"
+    "markdown-to-html": "^0.0.13",
+    "showdown": "^2.1.0"
   },
   "dependencies": {
     "github-markdown": "^3.2.0",
