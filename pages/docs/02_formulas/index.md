@@ -9,9 +9,10 @@
 - [Election Winner(s) Formula](#elections-winner-formula)
 
 ## Content Check Quiz ##
-- [Content check quiz answer indexes](#content-check-quiz-answers-indexes-formula)
+- [Content Complete Formula](#content-complete-formula)
 
 ## Roles ##
+- [Citizenship Application Formula](#citizenship-application-formula)
 - [Citizenship Grant/Revoke Formula](#citizenship-grant-revoke-formula)
 - [Administrator Role Grant/Revoke Formula](#administrator-role-grant-revoke-formula)
 
@@ -55,7 +56,7 @@ $$ + 3 + 3 + 3 \text{(all the 3 responses on the articles)} = 44. $$
 **Example 2:**
 You read the voting content and you read 4 con articles and one response related to them.
 
-**calculation:**
+**Calculation:**
 $$\text{Voting Score} = $$
 $$ 5 \text{(for the reading of the voting content)} $$
 $$ + 5 + 5 + 5 + 5 \text{(for the individual con articles)} $$
@@ -65,8 +66,126 @@ $$ + 3 \text{(for the one read response)} = 28. $$
 **Example 3:**
 You read the voting content and you read 2 con and 2 pro articles and all the related responses to them.
 
-**calculation:**
+**Calculation:**
 $$\text{Voting Score} = $$
 $$ 5 \text{(for the reading of the voting content)} $$
 $$ + 5 * 5 + 5 * 5 \text{(for the 2-2 pro and con articles)} $$
 $$ + 3 + 3 + 3 + 3 \text{(for all the responses)} = 67. $$
+
+
+
+## <div id="voting-win-formula">Voting Win Formula</div>
+
+### Formula:
+
+### Explanation:
+
+**Example 1:**
+
+**Calculation:**
+
+**Example 2:**
+
+**Calculation:**
+
+
+## <div id="voting-cycle-formula">Voting Cycle Formula</div>
+
+### Formula:
+
+### Explanation:
+
+**Example 1:**
+
+**Calculation:**
+
+**Example 2:**
+
+**Calculation:**
+
+## <div id="elections-winner-formula">Election Winner(s) Formula</div>
+
+### Formula:
+
+### Explanation:
+
+**Example 1:**
+
+**Calculation:**
+
+**Example 2:**
+
+**Calculation:**
+
+
+## <div id="content-complete-formula">Content Complete Formula</div>
+
+### Formula:
+
+### Explanation:
+
+**Example 1:**
+
+**Calculation:**
+
+**Example 2:**
+
+**Calculation:**
+
+## <div id="citizenship-application-formula">Citizenship Application Formula</div>
+
+### Formula:
+
+### Explanation:
+
+**Example 1:**
+
+**Calculation:**
+
+**Example 2:**
+
+**Calculation:**
+
+
+## <div id="citizenship-grant-revoke-formula">Citizenship Grant/Revoke Formula</div>
+
+### Formula:
+
+### Explanation:
+
+**Example 1:**
+
+**Calculation:**
+
+**Example 2:**
+
+**Calculation:**
+
+## <div id="citizenship-grant-revoke-formula">Citizenship Grant/Revoke Formula</div>
+
+### Formula:
+
+### Explanation:
+
+**Example 1:**
+
+**Calculation:**
+
+**Example 2:**
+
+**Calculation:**
+
+
+## <div id="administrator-role-grant-revoke-formula">Administrator Role Grant/Revoke Formula</div>
+
+### Formula:
+
+### Explanation:
+
+**Example 1:**
+
+**Calculation:**
+
+**Example 2:**
+
+**Calculation:**
