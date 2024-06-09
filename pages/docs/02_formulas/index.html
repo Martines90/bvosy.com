@@ -58,6 +58,28 @@
           font-size: 18px;
         }
       }
+
+      mjx-container.MathJax > mjx-math {
+        float: left !important;
+        padding-right: 100% !important;
+        padding-bottom: 15px !important;
+      }
+
+      details summary {
+        background-color: #caacac;
+        padding: 5px;
+        padding-left: 15px;
+        font-weight: 500;
+        font-size: 22px;
+      }
+
+      .markdown-heading h2 {
+        border-bottom: 1px solid black;
+      }
+
+      .markdown-body > span .markdown-heading h2 {
+        border-bottom: unset;
+      }
     </style>
   </head>
   <body class="markdown-body">
@@ -65,10 +87,11 @@
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
         >&times;</a
       >
-      <a href="#">About</a>
-      <a href="#">Services</a>
-      <a href="#">Clients</a>
-      <a href="#">Contact</a>
+      <a href="#">BVS Application (1.0)</a>
+      <a href="/pages/docs/03_contract/index.html">BVS Contract (1.0)</a>
+      <a href="/pages/docs/02_formulas/index.html">Formulas</a>
+      <a href="#">Terminology</a>
+      <a href="#">BVS (2.0)</a>
     </div>
     <span style="font-size: 30px; cursor: pointer" onclick="openNav()"
       >&#9776; Documentation</span
@@ -84,6 +107,7 @@
       }
     </script>
 <div class="markdown-heading"><h1 class="heading-element">Formulas - "the math under the hood"</h1><a id="formulas---the-math-under-the-hood" class="anchor" aria-label="Permalink: Formulas - &quot;the math under the hood&quot;" href="#formulas---the-math-under-the-hood"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<span>
 <div class="markdown-heading"><h2 class="heading-element">Voting</h2><a id="voting" class="anchor" aria-label="Permalink: Voting" href="#voting"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
 <ul>
 <li><a href="#vote-score-formula">Vote Score Formula</a></li>
@@ -94,15 +118,7 @@
 <ul>
 <li><a href="#elections-winner-formula">Election Winner(s) Formula</a></li>
 </ul>
-<div class="markdown-heading"><h2 class="heading-element">Content Check Quiz</h2><a id="content-check-quiz" class="anchor" aria-label="Permalink: Content Check Quiz" href="#content-check-quiz"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
-<ul>
-<li><a href="#content-check-quiz-answers-indexes-formula">Content check quiz answer indexes</a></li>
-</ul>
-<div class="markdown-heading"><h2 class="heading-element">Roles</h2><a id="roles" class="anchor" aria-label="Permalink: Roles" href="#roles"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
-<ul>
-<li><a href="#citizenship-grant-revoke-formula">Citizenship Grant/Revoke Formula</a></li>
-<li><a href="#administrator-role-grant-revoke-formula">Administrator Role Grant/Revoke Formula</a></li>
-</ul>
+</span>
 <div class="markdown-heading"><h2 class="heading-element"><div id="vote-score-formula">(balanced) Vote Score Formula</div></h2><a id="balanced-vote-score-formula" class="anchor" aria-label="Permalink: (balanced) Vote Score Formula" href="#balanced-vote-score-formula"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
 <div class="markdown-heading"><h3 class="heading-element">Formula:</h3><a id="formula" class="anchor" aria-label="Permalink: Formula:" href="#formula"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
 <p>The weight of a vote calculated the following way:</p>
@@ -123,28 +139,128 @@
 <li>the amount of article related responses they read</li>
 </ul>
 <p>Let's see some examples, how a voter voting score can vary depending on the above applied formula.</p>
-<p><strong>Example 1:</strong>
-You read the voting content and you read 2 pro article and 1 con article and the related responses then your voting score will be like:</p>
-<p><strong>calculation:</strong>
+<details>
+    <summary>Examples</summary>
+<p><strong>Example 1:</strong></p>
+<p>You read the voting content and you read 2 pro article and 1 con article and the related responses then your voting score will be like:</p>
+<p><strong>Calculation:</strong>
 $$\text{Voting Score} = $$
 $$ 5 \text{(for the reading of the voting content)} $$
 $$ + 5 * 5 \text{(for the reading of 1-1 pro and con article)} $$
 $$ + 5 \text{(for the reading one more pro article)} $$
 $$ + 3 + 3 + 3 \text{(all the 3 responses on the articles)} = 44. $$</p>
-<p><strong>Example 2:</strong>
-You read the voting content and you read 4 con articles and one response related to them.</p>
-<p><strong>calculation:</strong>
+<p><strong>Example 2:</strong></p>
+<p>You read the voting content and you read 4 con articles and one response related to them.</p>
+<p><strong>Calculation:</strong>
 $$\text{Voting Score} = $$
 $$ 5 \text{(for the reading of the voting content)} $$
 $$ + 5 + 5 + 5 + 5 \text{(for the individual con articles)} $$
 $$ + 3 \text{(for the one read response)} = 28. $$</p>
-<p><strong>Example 3:</strong>
-You read the voting content and you read 2 con and 2 pro articles and all the related responses to them.</p>
-<p><strong>calculation:</strong>
+<p><strong>Example 3:</strong></p>
+<p>You read the voting content and you read 2 con and 2 pro articles and all the related responses to them.</p>
+<p><strong>Calculation:</strong>
 $$\text{Voting Score} = $$
 $$ 5 \text{(for the reading of the voting content)} $$
 $$ + 5 * 5 + 5 * 5 \text{(for the 2-2 pro and con articles)} $$
 $$ + 3 + 3 + 3 + 3 \text{(for all the responses)} = 67. $$</p>
+</details>
+<div class="markdown-heading"><h2 class="heading-element"><div id="voting-win-formula">Voting Win Formula</div></h2><a id="voting-win-formula" class="anchor" aria-label="Permalink: Voting Win Formula" href="#voting-win-formula"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Formula:</h3><a id="formula-1" class="anchor" aria-label="Permalink: Formula:" href="#formula-1"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>1# voting is valid if:</p>
+<p>$$ \text{number of votes} &gt; \text{10% of CITIZENS} $$</p>
+<p>2# Voting win if:</p>
+<p>$$ \text{Total amount of voting score on A (yes)} &gt; \text{Total amount of voting score on B (no)} $$</p>
+<div class="markdown-heading"><h3 class="heading-element">Explanation:</h3><a id="explanation-1" class="anchor" aria-label="Permalink: Explanation:" href="#explanation-1"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>First the system checks if the total number of votes on the actual finished voting is more than the 10% of the total amount of CITIZENS</p>
+<details>
+    <summary>Examples</summary>
+**Example 1:**
+<p>Total number of citizens: 121</p>
+<ul>
+<li>
+<p>23 "yes" vote.</p>
+</li>
+<li>
+<p>Total "yes" vote score is 1125</p>
+</li>
+<li>
+<p>25 "no" vote</p>
+</li>
+<li>
+<p>Total "no" vote score is 985 (This can happen in the case if voters read less articles/responses related to the voting)</p>
+</li>
+</ul>
+<p><strong>Result:</strong></p>
+<ul>
+<li>
+<p>Voting is valid
+$$ 23 + 25 &gt; 121 * 0.1 $$</p>
+</li>
+<li>
+<p>"yes" vote win
+$$ 1125 &gt; 985 $$</p>
+</li>
+</ul>
+<p><strong>Example 2:</strong></p>
+<p>Total number of citizens: 138651</p>
+<ul>
+<li>
+<p>5611 "yes" vote.</p>
+</li>
+<li>
+<p>Total "yes" vote score is 89340</p>
+</li>
+<li>
+<p>1103 "no" vote</p>
+</li>
+<li>
+<p>Total "no" vote score is 22655</p>
+</li>
+</ul>
+<p><strong>Result:</strong></p>
+<ul>
+<li>Voting is invalid
+$$ 89340 + 22655 &lt; 138651 * 0.1 $$</li>
+</ul>
+</details>
+<div class="markdown-heading"><h2 class="heading-element"><div id="voting-cycle-formula">Voting Cycle Formula</div></h2><a id="voting-cycle-formula" class="anchor" aria-label="Permalink: Voting Cycle Formula" href="#voting-cycle-formula"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Formula:</h3><a id="formula-2" class="anchor" aria-label="Permalink: Formula:" href="#formula-2"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>$$ \text{Voting cycle count} = \text{Days passed since first voting cycle start date} / 30 $$</p>
+<div class="markdown-heading"><h3 class="heading-element">Explanation:</h3><a id="explanation-2" class="anchor" aria-label="Permalink: Explanation:" href="#explanation-2"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>The system divides with 30 days the amount of time passed since the defined first voting cycle start date.</p>
+<details>
+    <summary>Examples</summary>
+<p><strong>Example 1:</strong></p>
+<p>$$ \text{First voting cycle start date} = 2024.01.01 $$
+$$ \text{Present date} = 2026.08.13 $$</p>
+<p>$$ \text{Days passed between 2024.01.01 and 2026.08.13} = 955 $$</p>
+<p>$$ 955 / 30 = 31. $$</p>
+<p>So the actual voting cycle is the 31th one.</p>
+</details>
+<div class="markdown-heading"><h2 class="heading-element"><div id="elections-winner-formula">Election Winner(s) Formula</div></h2><a id="election-winners-formula" class="anchor" aria-label="Permalink: Election Winner(s) Formula" href="#election-winners-formula"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Formula:</h3><a id="formula-3" class="anchor" aria-label="Permalink: Formula:" href="#formula-3"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>$$ \text{Minimum requirement check}: \text{number of votes} &gt; \text{total votes} * 0.1 $$</p>
+<p>$$ \text{Credit calculation formula}: \text{number of votes} / \text{total votes} * 10 $$</p>
+<div class="markdown-heading"><h3 class="heading-element">Explanation:</h3><a id="explanation-3" class="anchor" aria-label="Permalink: Explanation:" href="#explanation-3"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>The minimum requirement to be elected is to own at least 10% of the total votes. +1 more credit can be gained after every 10% of th owned votes.</p>
+<details>
+    <summary>Examples</summary>
+<p><strong>Example 1:</strong></p>
+<p>Candidate 1: 133 vote
+Candidate 2: 47 vote
+Candidate 3: 455 vote</p>
+<p>Candidate 1 will gain
+Candidate 2 will not get elected.</p>
+<p><strong>Calculation:</strong></p>
+<p>$$ \text{Total votes}: 133 + 47 + 455 = 635 $$</p>
+<br>
+<p>$$ \text{Candidate 1 % of votes}: 133 / 635 * 100 = 20,9% $$</p>
+<p>$$ \text{Candidate 2 % of votes}: 47 / 635 * 100 = 7,4% $$</p>
+<p>$$ \text{Candidate 3 % of votes}: 455 / 635 * 100 = 71,6% $$</p>
+<br>
+<p>$$ \text{Candidate 1 credits}: 20,9 / 10 = 2 $$
+$$ \text{Candidate 3 credits}: 71,6 / 10 = 7 $$</p>
+</details>
 
     </body>
 </html>

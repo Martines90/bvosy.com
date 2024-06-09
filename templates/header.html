@@ -16,6 +16,10 @@
         font-family: "Lato", sans-serif;
       }
 
+      .nav-container {
+        width: 250px;
+      }
+
       .sidenav {
         height: 100%;
         width: 0;
@@ -58,17 +62,42 @@
           font-size: 18px;
         }
       }
+
+      mjx-container.MathJax > mjx-math {
+        float: left !important;
+        padding-right: 100% !important;
+        padding-bottom: 15px !important;
+      }
+
+      details summary {
+        background-color: #caacac;
+        padding: 5px;
+        padding-left: 15px;
+        font-weight: 500;
+        font-size: 22px;
+      }
+
+      .markdown-heading h2 {
+        border-bottom: 1px solid black;
+      }
+
+      .markdown-body > span .markdown-heading h2 {
+        border-bottom: unset;
+      }
     </style>
   </head>
   <body class="markdown-body">
     <div id="mySidenav" class="sidenav">
-      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
-        >&times;</a
-      >
-      <a href="#">About</a>
-      <a href="#">Services</a>
-      <a href="#">Clients</a>
-      <a href="#">Contact</a>
+      <div class="nav-container">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
+          >&times;</a
+        >
+        <a href="#">BVS Application (1.0)</a>
+        <a href="/pages/docs/03_contract/index.html">BVS Contract (1.0)</a>
+        <a href="/pages/docs/02_formulas/index.html">Formulas</a>
+        <a href="#">Terminology</a>
+        <a href="#">BVS (2.0)</a>
+      </div>
     </div>
     <span style="font-size: 30px; cursor: pointer" onclick="openNav()"
       >&#9776; Documentation</span

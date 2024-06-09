@@ -58,6 +58,28 @@
           font-size: 18px;
         }
       }
+
+      mjx-container.MathJax > mjx-math {
+        float: left !important;
+        padding-right: 100% !important;
+        padding-bottom: 15px !important;
+      }
+
+      details summary {
+        background-color: #caacac;
+        padding: 5px;
+        padding-left: 15px;
+        font-weight: 500;
+        font-size: 22px;
+      }
+
+      .markdown-heading h2 {
+        border-bottom: 1px solid black;
+      }
+
+      .markdown-body > span .markdown-heading h2 {
+        border-bottom: unset;
+      }
     </style>
   </head>
   <body class="markdown-body">
@@ -83,7 +105,1942 @@
         document.getElementById("mySidenav").style.width = "0";
       }
     </script>
-{"message":"API rate limit exceeded for 89.134.29.38. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)","documentation_url":"https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting"}
+<div class="markdown-heading"><h1 class="heading-element">BVS Smart Contract (1.0)</h1><a id="bvs-smart-contract-10" class="anchor" aria-label="Permalink: BVS Smart Contract (1.0)" href="#bvs-smart-contract-10"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p><strong>Blockchain network:</strong> Solana<br>
+<strong>Solidity version:</strong> 0.8.9<br>
+<strong>Source code:</strong> <a href="https://github.com/Martines90/bvs-v0">Github link</a></p>
+<span>
+<div class="markdown-heading"><h3 class="heading-element">1. Functions</h3><a id="1-functions" class="anchor" aria-label="Permalink: 1. Functions" href="#1-functions"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>1.1 Roles</p>
+<ul>
+<li><a href="#constructor">constructor</a></li>
+<li><a href="#applyForCitizenshipRole">applyForCitizenshipRole</a></li>
+<li><a href="#checkIfAccountHasRole">checkIfAccountHasRole</a></li>
+<li><a href="#_checkRole">_checkRole</a></li>
+<li><a href="#grantCitizenRole">grantCitizenRole</a></li>
+<li><a href="#hasRole">hasRole</a></li>
+<li><a href="#revokeAdminRoleApproval">revokeAdminRoleApproval</a></li>
+<li><a href="#_revokeAdminRoleApproval">_revokeAdminRoleApproval</a></li>
+<li><a href="#_revokeRole">_revokeRole</a></li>
+<li><a href="#_setupRole">_setupRole</a></li>
+<li><a href="#sendGrantAdministratorRoleApproval">sendGrantAdministratorRoleApproval</a></li>
+<li><a href="#getAdminsSize">getAdminsSize</a></li>
+<li><a href="#getCitizensSize">getCitizensSize</a></li>
+<li><a href="#getPoliticalActorsSize">getPoliticalActorsSize</a></li>
+</ul>
+<p>1.2 Update/add:</p>
+<ul>
+<li><a href="#addUpdateContact">addUpdateContact</a></li>
+<li><a href="#updateCitizenshipApplicationFee">updateCitizenshipApplicationFee</a></li>
+<li><a href="#updateElectionsApplicationFee">updateElectionsApplicationFee</a></li>
+</ul>
+<p>1.3 Elections:</p>
+<ul>
+<li><a href="#scheduleNextElections">scheduleNextElections</a></li>
+<li><a href="#applyForElections">applyForElections</a></li>
+<li><a href="#voteOnElections">voteOnElections</a></li>
+<li><a href="#closeElections">closeElections</a></li>
+<li><a href="#getElectionCandidatesSize">getElectionCandidatesSize</a></li>
+<li><a href="#getElectionVotersSize">getElectionVotersSize</a></li>
+</ul>
+<p>1.4 Voting:</p>
+<ul>
+<li><a href="#addKeccak256HashedAnswersToVotingContent">addKeccak256HashedAnswersToVotingContent</a></li>
+<li><a href="#approveVoting">approveVoting</a></li>
+<li><a href="#assignQuizIpfsHashToVoting">assignQuizIpfsHashToVoting</a></li>
+<li><a href="#calculateVoteScore">calculateVoteScore</a></li>
+<li><a href="#isVotingWon">isVotingWon</a></li>
+<li><a href="#scheduleNewVoting">scheduleNewVoting</a></li>
+<li><a href="#setFirstVotingCycleStartDate">setFirstVotingCycleStartDate</a></li>
+<li><a href="#unlockVotingBudget">unlockVotingBudget</a></li>
+<li><a href="#voteOnVoting">voteOnVoting</a></li>
+<li><a href="#getVoting">getVoting</a></li>
+<li><a href="#getVotingKeysLength">getVotingKeysLength</a></li>
+<li><a href="#getVotingCycleIndexesSize">getVotingCycleIndexesSize</a></li>
+</ul>
+<p>1.5 Contents/quizzes:</p>
+<ul>
+<li><a href="#addKeccak256HashedAnswersToArticle">addKeccak256HashedAnswersToArticle</a></li>
+<li><a href="#addKeccak256HashedAnswersToArticleResponse">addKeccak256HashedAnswersToArticleResponse</a></li>
+<li><a href="#assignQuizIpfsHashToArticleOrResponse">assignQuizIpfsHashToArticleOrResponse</a></li>
+<li><a href="#completeContentReadQuiz">completeContentReadQuiz</a></li>
+<li><a href="#isContentReadQuizCorrect">isContentReadQuizCorrect</a></li>
+<li><a href="#publishProConArticle">publishProConArticle</a></li>
+<li><a href="#publishProConArticleResponse">publishProConArticleResponse</a></li>
+<li><a href="#getAccountArticleQuizAnswerIndexes">getAccountArticleQuizAnswerIndexes</a></li>
+<li><a href="#getAccountArticleResponseQuizAnswerIndexes">getAccountArticleResponseQuizAnswerIndexes</a></li>
+<li><a href="#getAccountQuizAnswerIndexes">getAccountQuizAnswerIndexes</a></li>
+<li><a href="#getAccountVotingQuizAnswerIndexes">getAccountVotingQuizAnswerIndexes</a></li>
+<li><a href="#getContentReadCheckAnswersLength">getContentReadCheckAnswersLength</a></li>
+<li><a href="#getArticleKeysLength">getArticleKeysLength</a></li>
+</ul>
+<p>1.6 General:</p>
+<ul>
+<li><a href="#getContactKeysSize">getContactKeysSize</a></li>
+</ul>
+<p>1.7 Helpers</p>
+<ul>
+<li><a href="#isEmptyString">isEmptyString</a></li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">2. Validators (modifier)</h3><a id="2-validators-modifier" class="anchor" aria-label="Permalink: 2. Validators (modifier)" href="#2-validators-modifier"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>2.1 Roles</p>
+<ul>
+<li><a href="#onlyRole">onlyRole</a></li>
+<li><a href="#minCitizenshipApplicationFeeCovered">minCitizenshipApplicationFeeCovered</a></li>
+<li><a href="#appliedForCitizenRole">appliedForCitizenRole</a></li>
+<li><a href="#hasRoleToModify">hasRoleToModify</a></li>
+<li><a href="#hasCitizenRoleGrantCredit">hasCitizenRoleGrantCredit</a></li>
+<li><a href="#adminRoleGrantApprovalNotSent">adminRoleGrantApprovalNotSent</a></li>
+</ul>
+<p>2.2 Elections</p>
+<ul>
+<li><a href="#noUnclosedElections">noUnclosedElections</a></li>
+<li><a href="#validApplication">validApplication</a></li>
+<li><a href="#newElectionsStartDateIs30DaysAhead">newElectionsStartDateIs30DaysAhead</a></li>
+<li><a href="#validVote">validVote</a></li>
+<li><a href="#canCloseElections">canCloseElections</a></li>
+<li><a href="#minCandidateApplicationFeeCovered">minCandidateApplicationFeeCovered</a></li>
+</ul>
+<p>2.3 Voting</p>
+<ul>
+<li><a href="#criticisedArticleRelatedToYourVoting">criticisedArticleRelatedToYourVoting</a></li>
+<li><a href="#approveAttempt3DaysBeforeVotingStarts">approveAttempt3DaysBeforeVotingStarts</a></li>
+<li><a href="#contentCheckQuizCompleted">contentCheckQuizCompleted</a></li>
+<li><a href="#criticisedArticleRelatedToYourVoting">criticisedArticleRelatedToYourVoting</a></li>
+<li><a href="#creatorOfVotingRespondedOnArticles">creatorOfVotingRespondedOnArticles</a></li>
+<li><a href="#enoughVotesArrived">enoughVotesArrived</a></li>
+<li><a href="#firstVotingCycleStartDateIsInTheFuture">firstVotingCycleStartDateIsInTheFuture</a></li>
+<li><a href="#newVotingScheduledAtLeast10daysAhead">newVotingScheduledAtLeast10daysAhead</a></li>
+<li><a href="#notVotedYetOnThisVoting">notVotedYetOnThisVoting</a></li>
+<li><a href="#newVotingScheduledMaximum30daysAhead">newVotingScheduledMaximum30daysAhead</a></li>
+<li><a href="#votingApproved">votingApproved</a></li>
+<li><a href="#votingBelongsToSender">votingBelongsToSender</a></li>
+<li><a href="#votingContentQuizIpfsAssigned">votingContentQuizIpfsAssigned</a></li>
+<li><a href="#votingExists">votingExists</a></li>
+<li><a href="#votingIsOngoing">votingIsOngoing</a></li>
+<li><a href="#votingNotFinished">votingNotFinished</a></li>
+<li><a href="#votingNotYetStarted">votingNotYetStarted</a></li>
+<li><a href="#votingPeriodIsActive">votingPeriodIsActive</a></li>
+<li><a href="#votingWon">votingWon</a></li>
+</ul>
+<p>2.4 Content</p>
+<ul>
+<li><a href="#articleShouldExists">articleShouldExists</a></li>
+<li><a href="#enoughContentReadQuizAnswerAdded">enoughContentReadQuizAnswerAdded</a></li>
+<li><a href="#hasArticleContentIpfsHashAssigned">hasArticleContentIpfsHashAssigned</a></li>
+<li><a href="#hasArticleResponseAssigned">hasArticleResponseAssigned</a></li>
+<li><a href="#hasArticleResponseContentCheckIpfsHash">hasArticleResponseContentCheckIpfsHash</a></li>
+<li><a href="#hasCreditsLeftToPublishArticle">hasCreditsLeftToPublishArticle</a></li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">3. Global variables</h3><a id="3-global-variables" class="anchor" aria-label="Permalink: 3. Global variables" href="#3-global-variables"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>3.1 Roles:</p>
+<ul>
+<li><a href="#ADMINISTRATOR">ADMINISTRATOR</a></li>
+<li><a href="#POLITICAL_ACTOR">POLITICAL_ACTOR</a></li>
+<li><a href="#CITIZEN">CITIZEN</a></li>
+</ul>
+<p>3.2 Constants:</p>
+<ul>
+<li><a href="#APPROVE_VOTING_BEFORE_IT_STARTS_LIMIT">APPROVE_VOTING_BEFORE_IT_STARTS_LIMIT</a></li>
+<li><a href="#CONTENT_CHECK_ASKED_NUM_OF_QUESTIONS">CONTENT_CHECK_ASKED_NUM_OF_QUESTIONS</a></li>
+<li><a href="#ELECTION_START_END_INTERVAL">ELECTION_START_END_INTERVAL</a></li>
+<li><a href="#MAX_DAILY_NEW_CITIZENS_CAN_ADD_PERCENTAGE">MAX_DAILY_NEW_CITIZENS_CAN_ADD_PERCENTAGE</a></li>
+<li><a href="#MIN_VOTE_SCORE">MIN_VOTE_SCORE</a></li>
+<li><a href="#MINIMUM_PERCENTAGE_OF_ELECTION_VOTES">MINIMUM_PERCENTAGE_OF_ELECTION_VOTES</a></li>
+<li><a href="#MIN_PERCENTAGE_OF_VOTES">MIN_PERCENTAGE_OF_VOTES</a></li>
+<li><a href="#MIN_PERCENTAGE_GRANT_ADMIN_APPROVALS_REQUIRED">MIN_PERCENTAGE_GRANT_ADMIN_APPROVALS_REQUIRED</a></li>
+<li><a href="#MIN_TOTAL_CONTENT_READ_CHECK_ANSWER">MIN_TOTAL_CONTENT_READ_CHECK_ANSWER</a></li>
+<li><a href="#NEW_VOTING_PERIOD_MIN_SCHEDULE_AHEAD_TIME">NEW_VOTING_PERIOD_MIN_SCHEDULE_AHEAD_TIME</a></li>
+<li><a href="#VOTING_CYCLE_INTERVAL">VOTING_CYCLE_INTERVAL</a></li>
+<li><a href="#VOTING_DURATION">VOTING_DURATION</a></li>
+</ul>
+<p>3.3 General:</p>
+<ul>
+<li><a href="#citizenRoleApplicationFee">citizenRoleApplicationFee</a></li>
+<li><a href="#electionsCandidateApplicationFee">electionsCandidateApplicationFee</a></li>
+<li><a href="#firstVotingCycleStartDate">firstVotingCycleStartDate</a></li>
+</ul>
+</span>
+<div class="markdown-heading"><h1 class="heading-element">Functions</h1><a id="functions" class="anchor" aria-label="Permalink: Functions" href="#functions"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h2 class="heading-element">Functions &gt; Roles</h2><a id="functions--roles" class="anchor" aria-label="Permalink: Functions &gt; Roles" href="#functions--roles"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element"><div id="constructor">constructor</div></h3><a id="constructor" class="anchor" aria-label="Permalink: constructor" href="#constructor"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">constructor</span>() {
+    admins.<span class="pl-en">push</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>);
+    adminRoleGrantApprovals[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">=</span> <span class="pl-c1">1</span>;
+    citizens.<span class="pl-en">push</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>);
+    creationDate <span class="pl-k">=</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span>;
+    <span class="pl-en">_setupRole</span>(ADMINISTRATOR, <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>);
+    <span class="pl-en">_setupRole</span>(CITIZEN, <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>);
+}</pre></div>
+<p>Assigns deployer account the following roles (<strong>CITIZEN</strong>, <strong>ADMININSTRATOR</strong>) and declares creation date.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="applyForCitizenshipRole">applyForCitizenshipRole</div></h3><a id="applyforcitizenshiprole" class="anchor" aria-label="Permalink: applyForCitizenshipRole" href="#applyforcitizenshiprole"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>
+<strong>_emailPublicKeyCombinedHash</strong>: the unique hash generated from the account personal data for later identification.</li>
+</ul>
+<p>validation checks:</p>
+<ul>
+<li>minCitizenshipApplicationFeeCovered: checks if transaction value bigger than the application fee</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> applyForCitizenshipRole</span></span>(
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_emailPublicKeyCombinedHash</span>
+) <span class="pl-k">public</span> <span class="pl-k">payable</span> minCitizenshipApplicationFeeCovered {
+    citizenshipApplications[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">=</span> _emailPublicKeyCombinedHash;
+}</pre></div>
+<p>Registers user citizenship application.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="checkIfAccountHasRole">checkIfAccountHasRole</div></h3><a id="checkifaccounthasrole" class="anchor" aria-label="Permalink: checkIfAccountHasRole" href="#checkifaccounthasrole"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>_account: account address</li>
+<li>_role: specific role byte value</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> checkIfAccountHasRole</span></span>(
+    <span class="pl-c1">address</span> <span class="pl-v">_account</span>,
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_role</span>
+) <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">bool</span>) {
+    <span class="pl-k">return</span> <span class="pl-en">hasRole</span>(_role, _account);
+}</pre></div>
+<p>Checks if account has the specified role.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="_checkRole">_checkRole</div></h3><a id="_checkrole" class="anchor" aria-label="Permalink: _checkRole" href="#_checkrole"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>role: specific role byte value</li>
+<li>account: account address</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> _checkRole</span></span>(<span class="pl-c1">bytes32</span> <span class="pl-v">role</span>, <span class="pl-c1">address</span> <span class="pl-v">account</span>) <span class="pl-k">internal</span> <span class="pl-k">view</span> <span class="pl-k">virtual</span> {
+    <span class="pl-k">if</span> (<span class="pl-k">!</span>_hasRole[role][account]) {
+        <span class="pl-k">revert</span> <span class="pl-en">PermissionsUnauthorizedAccount</span>(account, role);
+    }
+}</pre></div>
+<p>Checks if account has the specified role.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="grantCitizenRole">grantCitizenRole</div></h3><a id="grantcitizenrole" class="anchor" aria-label="Permalink: grantCitizenRole" href="#grantcitizenrole"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>
+<strong>_account</strong>: address of a non <strong>CITIZEN</strong>, who applied for citizenship</li>
+<li>
+<strong>_emailPublicKeyHash</strong>: the generated hash from the applicant personal data</li>
+<li>
+<strong>_revokeCitizenRole</strong>: it decides if revoke or grant action takes place.</li>
+</ul>
+<p>validation checks:</p>
+<ul>
+<li>only <strong>ADMINISTRATOR</strong> role can call</li>
+<li>
+<strong>hasRoleToModify</strong>: account has a role to remove or not has any role (in grant case).</li>
+<li>
+<strong>hasCitizenRoleGrantCredit</strong>: <strong>ADMINISTRATOR</strong> has account role modify credits left for the day.</li>
+<li>
+<strong>appliedForCitizenRole</strong>: account completed the citizenship role application step.</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> grantCitizenRole</span></span>(
+    <span class="pl-c1">address</span> <span class="pl-v">_account</span>,
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_emailPublicKeyHash</span>,
+    <span class="pl-c1">bool</span> <span class="pl-v">_revokeCitizenRole</span>
+)
+    <span class="pl-k">public</span>
+    <span class="pl-en">onlyRole</span>(ADMINISTRATOR)
+    <span class="pl-en">hasRoleToModify</span>(_account, _revokeCitizenRole)
+    hasCitizenRoleGrantCredit
+    <span class="pl-en">appliedForCitizenRole</span>(_account, _emailPublicKeyHash, _revokeCitizenRole)
+{
+    <span class="pl-c1">uint</span> daysPassed <span class="pl-k">=</span> (<span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">-</span> creationDate) <span class="pl-k">/</span> <span class="pl-c1">60</span> <span class="pl-k">/</span> <span class="pl-c1">60</span> <span class="pl-k">/</span> <span class="pl-c1">24</span>;
+    dailyCitizenRoleModifyCredit[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>][daysPassed]<span class="pl-k">++</span>;
+    <span class="pl-k">if</span> (<span class="pl-k">!</span>_revokeCitizenRole) {
+        <span class="pl-en">_setupRole</span>(CITIZEN, _account);
+        citizens.<span class="pl-en">push</span>(_account);
+        <span class="pl-k">delete</span> citizenshipApplications[_account];
+    } <span class="pl-k">else</span> {
+        <span class="pl-k">if</span> (<span class="pl-en">hasRole</span>(CITIZEN, _account)) {
+            <span class="pl-en">_revokeRole</span>(CITIZEN, _account);
+        }
+        <span class="pl-k">delete</span> citizenshipApplications[_account];
+        <span class="pl-k">for</span> (<span class="pl-c1">uint</span> i; i <span class="pl-k">&lt;</span> citizens.<span class="pl-mi">length</span>; i<span class="pl-k">++</span>) {
+            <span class="pl-k">if</span> (citizens[i] <span class="pl-k">==</span> _account) {
+                <span class="pl-k">delete</span> citizens[i];
+                <span class="pl-k">break</span>;
+            }
+        }
+    }
+}</pre></div>
+<p>Grants or revokes citizen role</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="hasRole">hasRole</div></h3><a id="hasrole" class="anchor" aria-label="Permalink: hasRole" href="#hasrole"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>role: specific role bytes value</li>
+<li>account: account address</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> hasRole</span></span>(<span class="pl-c1">bytes32</span> <span class="pl-v">role</span>, <span class="pl-c1">address</span> <span class="pl-v">account</span>) <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">bool</span>) {
+    <span class="pl-k">return</span> _hasRole[role][account];
+}</pre></div>
+<div class="markdown-heading"><h3 class="heading-element"><div id="revokeAdminRoleApproval">revokeAdminRoleApproval</div></h3><a id="revokeadminroleapproval" class="anchor" aria-label="Permalink: revokeAdminRoleApproval" href="#revokeadminroleapproval"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>revokedAccount: <strong>ADMINISTRATOR</strong> account address</li>
+</ul>
+<p>validation checks:</p>
+<ul>
+<li>has <strong>ADMINISTRATOR</strong> role</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> revokeAdminRoleApproval</span></span>(
+    <span class="pl-c1">address</span> <span class="pl-v">revokedAccount</span>
+) <span class="pl-k">public</span> <span class="pl-en">onlyRole</span>(ADMINISTRATOR) {
+    <span class="pl-en">_revokeAdminRoleApproval</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, revokedAccount);
+}</pre></div>
+<p>Revokes admin role approval.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="_revokeAdminRoleApproval">_revokeAdminRoleApproval</div></h3><a id="_revokeadminroleapproval" class="anchor" aria-label="Permalink: _revokeAdminRoleApproval" href="#_revokeadminroleapproval"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>admin: <strong>ADMINISTRATOR</strong> account address</li>
+<li>revokedAccount:  <strong>ADMINISTRATOR</strong> account address</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> _revokeAdminRoleApproval</span></span>(
+    <span class="pl-c1">address</span> <span class="pl-v">admin</span>,
+    <span class="pl-c1">address</span> <span class="pl-v">revokedAccount</span>
+) <span class="pl-k">internal</span> {
+    <span class="pl-k">for</span> (<span class="pl-c1">uint</span> i <span class="pl-k">=</span> <span class="pl-c1">0</span>; i <span class="pl-k">&lt;</span> adminApprovalSentToAccount[admin].<span class="pl-mi">length</span>; i<span class="pl-k">++</span>) {
+        <span class="pl-k">if</span> (adminApprovalSentToAccount[admin][i] <span class="pl-k">==</span> revokedAccount) {
+            <span class="pl-k">delete</span> adminApprovalSentToAccount[admin][i];
+            adminRoleGrantApprovals[revokedAccount]<span class="pl-k">--</span>;
+            <span class="pl-k">if</span> (
+                (adminRoleGrantApprovals[revokedAccount] <span class="pl-k">*</span> <span class="pl-c1">1000</span>) <span class="pl-k">/</span>
+                    admins.<span class="pl-mi">length</span> <span class="pl-k">&lt;</span>
+                MIN_PERCENTAGE_GRANT_ADMIN_APPROVALS_REQUIRED <span class="pl-k">*</span> <span class="pl-c1">10</span>
+            ) {
+                adminRoleGrantApprovals[revokedAccount]<span class="pl-k">--</span>;
+                <span class="pl-en">_revokeRole</span>(ADMINISTRATOR, revokedAccount);
+                <span class="pl-k">for</span> (<span class="pl-c1">uint</span> u <span class="pl-k">=</span> <span class="pl-c1">0</span>; u <span class="pl-k">&lt;</span> admins.<span class="pl-mi">length</span>; u<span class="pl-k">++</span>) {
+                    <span class="pl-k">if</span> (admins[u] <span class="pl-k">==</span> revokedAccount) {
+                        <span class="pl-k">delete</span> admins[u];
+                        admins[u] <span class="pl-k">=</span> admins[admins.<span class="pl-mi">length</span> <span class="pl-k">-</span> <span class="pl-c1">1</span>];
+                        admins.<span class="pl-en">pop</span>();
+                        <span class="pl-k">break</span>;
+                    }
+                }
+                <span class="pl-c">// make sure all the other admins get revoked their approval receieved from this admin</span>
+                <span class="pl-k">for</span> (
+                    <span class="pl-c1">uint</span> k <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+                    k <span class="pl-k">&lt;</span> adminApprovalSentToAccount[revokedAccount].<span class="pl-mi">length</span>;
+                    k<span class="pl-k">++</span>
+                ) {
+                    <span class="pl-en">_revokeAdminRoleApproval</span>(
+                        revokedAccount,
+                        adminApprovalSentToAccount[revokedAccount][k]
+                    );
+                    <span class="pl-k">delete</span> adminApprovalSentToAccount[revokedAccount][k];
+                }
+                <span class="pl-k">break</span>;
+            }
+        }
+    }
+}</pre></div>
+<p><strong>ADMINISTRATOR</strong> can add admin role revoke approval. If the number of approvals bigger than 50% then admin role also get revoked.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="_revokeRole">_revokeRole</div></h3><a id="_revokerole" class="anchor" aria-label="Permalink: _revokeRole" href="#_revokerole"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>role: specific role bytes value</li>
+<li>account: account address</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> _revokeRole</span></span>(<span class="pl-c1">bytes32</span> <span class="pl-v">role</span>, <span class="pl-c1">address</span> <span class="pl-v">account</span>) <span class="pl-k">internal</span> <span class="pl-k">virtual</span> {
+    <span class="pl-en">_checkRole</span>(role, account);
+    <span class="pl-k">delete</span> _hasRole[role][account];
+    <span class="pl-k">emit</span> <span class="pl-en">RoleRevoked</span>(role, account, <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>);
+}</pre></div>
+<p>Can revoke any kind of role (only other functions can call)</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="_setupRole">_setupRole</div></h3><a id="_setuprole" class="anchor" aria-label="Permalink: _setupRole" href="#_setuprole"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>role: specific role bytes value</li>
+<li>account: account address</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> _setupRole</span></span>(<span class="pl-c1">bytes32</span> <span class="pl-v">role</span>, <span class="pl-c1">address</span> <span class="pl-v">account</span>) <span class="pl-k">internal</span> <span class="pl-k">virtual</span> {
+    _hasRole[role][account] <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+    <span class="pl-k">emit</span> <span class="pl-en">RoleGranted</span>(role, account, <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>);
+}</pre></div>
+<p>Can grant any kind of role (only other functions can call)</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="sendGrantAdministratorRoleApproval">sendGrantAdministratorRoleApproval</div></h3><a id="sendgrantadministratorroleapproval" class="anchor" aria-label="Permalink: sendGrantAdministratorRoleApproval" href="#sendgrantadministratorroleapproval"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>_account: account address</li>
+</ul>
+<p>validation checks:</p>
+<ul>
+<li>has <strong>ADMINISTRATOR</strong> role</li>
+<li>adminRoleGrantApprovalNotSent: Checks if account already sent his grant approval</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> sendGrantAdministratorRoleApproval</span></span>(
+    <span class="pl-c1">address</span> <span class="pl-v">_account</span>
+) <span class="pl-k">public</span> <span class="pl-en">onlyRole</span>(ADMINISTRATOR) <span class="pl-en">adminRoleGrantApprovalNotSent</span>(_account) {
+    adminApprovalSentToAccount[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>].<span class="pl-en">push</span>(_account);
+    adminRoleGrantApprovals[_account]<span class="pl-k">++</span>;
+
+    <span class="pl-k">if</span> (
+        admins.<span class="pl-mi">length</span> <span class="pl-k">==</span> <span class="pl-c1">0</span> <span class="pl-k">||</span>
+        (adminRoleGrantApprovals[_account] <span class="pl-k">*</span> <span class="pl-c1">1000</span>) <span class="pl-k">/</span> admins.<span class="pl-mi">length</span> <span class="pl-k">&gt;</span>
+        MIN_PERCENTAGE_GRANT_ADMIN_APPROVALS_REQUIRED <span class="pl-k">*</span> <span class="pl-c1">10</span>
+    ) {
+        adminRoleGrantApprovals[_account]<span class="pl-k">++</span>;
+        <span class="pl-c">// also new admin has to automatically send his approvals to the already existing admins</span>
+        <span class="pl-k">for</span> (<span class="pl-c1">uint</span> i <span class="pl-k">=</span> <span class="pl-c1">0</span>; i <span class="pl-k">&lt;</span> admins.<span class="pl-mi">length</span>; i<span class="pl-k">++</span>) {
+            adminApprovalSentToAccount[_account].<span class="pl-en">push</span>(admins[i]);
+            adminRoleGrantApprovals[admins[i]]<span class="pl-k">++</span>;
+        }
+        <span class="pl-en">_setupRole</span>(ADMINISTRATOR, _account);
+        admins.<span class="pl-en">push</span>(_account);
+    }
+}</pre></div>
+<div class="markdown-heading"><h3 class="heading-element"><div id="getAdminsSize">getAdminsSize</div></h3><a id="getadminssize" class="anchor" aria-label="Permalink: getAdminsSize" href="#getadminssize"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> getAdminsSize</span></span>() <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint</span>) {
+    <span class="pl-k">return</span> admins.<span class="pl-mi">length</span>;
+}</pre></div>
+<p>Returns the number of <strong>ADMINISTRATORS</strong></p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="getCitizensSize">getCitizensSize</div></h3><a id="getcitizenssize" class="anchor" aria-label="Permalink: getCitizensSize" href="#getcitizenssize"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> getCitizensSize</span></span>() <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint</span>) {
+    <span class="pl-k">return</span> citizens.<span class="pl-mi">length</span>;
+}</pre></div>
+<p>Returns the number of <strong>CITIZENS</strong></p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="getPoliticalActorsSize">getPoliticalActorsSize</div></h3><a id="getpoliticalactorssize" class="anchor" aria-label="Permalink: getPoliticalActorsSize" href="#getpoliticalactorssize"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> getPoliticalActorsSize</span></span>() <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint</span>) {
+    <span class="pl-k">return</span> politicalActors.<span class="pl-mi">length</span>;
+}</pre></div>
+<p>Returns the number of <strong>POLITICAL_ACTORS</strong></p>
+<div class="markdown-heading"><h2 class="heading-element">Functions &gt; Update/add global variables:</h2><a id="functions--updateadd-global-variables" class="anchor" aria-label="Permalink: Functions &gt; Update/add global variables:" href="#functions--updateadd-global-variables"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element"><div id="addUpdateContact">addUpdateContact</div></h3><a id="addupdatecontact" class="anchor" aria-label="Permalink: addUpdateContact" href="#addupdatecontact"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>contactKey (refers to the value stored in <strong>contacts</strong> array)</li>
+<li>contactAddress (the value stored in the <strong>contacts</strong> array)</li>
+</ul>
+<p>pre execution checks:</p>
+<ul>
+<li>has <strong>ADMINISTRATOR</strong> role</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> addUpdateContact</span></span>(
+    <span class="pl-c1">string</span> <span class="pl-k">memory</span> <span class="pl-v">contactKey</span>,
+    <span class="pl-c1">string</span> <span class="pl-k">memory</span> <span class="pl-v">contactAddress</span>
+) <span class="pl-k">public</span> <span class="pl-en">onlyRole</span>(ADMINISTRATOR) {
+    <span class="pl-k">if</span> (<span class="pl-en">isEmptyString</span>(contacts[contactKey])) {
+        contactKeys.<span class="pl-en">push</span>(contactKey);
+    }
+    contacts[contactKey] <span class="pl-k">=</span> contactAddress;
+}</pre></div>
+<p>By calling <strong>addUpdateContact</strong> user can add any kind of new email/phone/website url/ etc contacts.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="updateCitizenshipApplicationFee">updateCitizenshipApplicationFee</div></h3><a id="updatecitizenshipapplicationfee" class="anchor" aria-label="Permalink: updateCitizenshipApplicationFee" href="#updatecitizenshipapplicationfee"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>_newCitizenshipApplicationFee (the new <strong>citizenRoleApplicationFee</strong>)</li>
+</ul>
+<p>pre execution checks:</p>
+<ul>
+<li>has <strong>ADMINISTRATOR</strong> role</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> updateCitizenshipApplicationFee</span></span>(
+    <span class="pl-c1">uint</span> <span class="pl-v">_newCitizenshipApplicationFee</span>
+) <span class="pl-k">public</span> <span class="pl-en">onlyRole</span>(ADMINISTRATOR) {
+    citizenRoleApplicationFee <span class="pl-k">=</span> _newCitizenshipApplicationFee;
+}</pre></div>
+<p>By calling <strong>updateCitizenshipApplicationFee</strong> user can update the value of the citizenship application fee.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="updateElectionsApplicationFee">updateElectionsApplicationFee</div></h3><a id="updateelectionsapplicationfee" class="anchor" aria-label="Permalink: updateElectionsApplicationFee" href="#updateelectionsapplicationfee"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>_newElectionsApplicationFee (the new <strong>electionsCandidateApplicationFee</strong>)</li>
+</ul>
+<p>pre execution checks:</p>
+<ul>
+<li>has <strong>ADMINISTRATOR</strong> role</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> updateElectionsApplicationFee</span></span>(
+    <span class="pl-c1">uint</span> <span class="pl-v">_newElectionsApplicationFee</span>
+) <span class="pl-k">public</span> <span class="pl-en">onlyRole</span>(ADMINISTRATOR) {
+    electionsCandidateApplicationFee <span class="pl-k">=</span> _newElectionsApplicationFee;
+}</pre></div>
+<p>By calling <strong>updateElectionsApplicationFee</strong> user can update the value of the elections candidate application fee.</p>
+<div class="markdown-heading"><h2 class="heading-element">Functions &gt; Elections</h2><a id="functions--elections" class="anchor" aria-label="Permalink: Functions &gt; Elections" href="#functions--elections"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element"><div id="scheduleNextElections">scheduleNextElections</div></h3><a id="schedulenextelections" class="anchor" aria-label="Permalink: scheduleNextElections" href="#schedulenextelections"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>_electionsStartDate (the date (*timestamp) when the next elections starts)</li>
+<li>_electionsEndDate (the date (*timestamp) when the next election ends)</li>
+</ul>
+<p>pre execution checks:</p>
+<ul>
+<li>has <strong>ADMINISTRATOR</strong> role</li>
+<li>
+<strong>noUnclosedElections</strong>: checks if there is any ongoing elections</li>
+<li>
+<strong>newElectionsStartDateIs30DaysAhead</strong>: start date is ahead at least 30 days</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> scheduleNextElections</span></span>(
+    <span class="pl-c1">uint256</span> <span class="pl-v">_electionsStartDate</span>,
+    <span class="pl-c1">uint256</span> <span class="pl-v">_electionsEndDate</span>
+)
+    <span class="pl-k">public</span>
+    <span class="pl-en">onlyRole</span>(ADMINISTRATOR)
+    noUnclosedElections
+    <span class="pl-en">newElectionsStartDateIs30DaysAhead</span>(_electionsStartDate)
+{
+    electionsStartDate <span class="pl-k">=</span> _electionsStartDate;
+    electionsEndDate <span class="pl-k">=</span> _electionsEndDate;
+
+    <span class="pl-k">for</span> (<span class="pl-c1">uint</span> i <span class="pl-k">=</span> <span class="pl-c1">0</span>; i <span class="pl-k">&lt;</span> politicalActors.<span class="pl-mi">length</span>; i<span class="pl-k">++</span>) {
+        <span class="pl-en">_revokeRole</span>(POLITICAL_ACTOR, politicalActors[i]);
+        <span class="pl-k">delete</span> politicalActorVotingCredits[politicalActors[i]];
+        <span class="pl-k">delete</span> politicalActors[i];
+    }
+    politicalActors <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">address</span>[](<span class="pl-c1">0</span>);
+}</pre></div>
+<p>By calling <strong>scheduleNextElections</strong> function user can schedule the next upcoming elections. Also when next elections scheduled, then all the <strong>POLITICAL_ACTOR</strong> roles get revoked and the stored political actor wallet keys and their voting credits will get deleted.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="applyForElections">applyForElections</div></h3><a id="applyforelections" class="anchor" aria-label="Permalink: applyForElections" href="#applyforelections"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>pre execution checks:</p>
+<ul>
+<li>has <strong>CITIZEN</strong> role</li>
+<li>
+<strong>minCandidateApplicationFeeCovered</strong>: the application fee covered by the transaction value</li>
+<li>
+<strong>validApplication</strong>: the application is</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> applyForElections</span></span>()
+    <span class="pl-k">public</span>
+    <span class="pl-k">payable</span>
+    <span class="pl-en">onlyRole</span>(CITIZEN)
+    minCandidateApplicationFeeCovered
+    validApplication
+{
+    electionCandidates.<span class="pl-en">push</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>);
+    electionCandidateScores[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">=</span> <span class="pl-c1">1</span>;
+}</pre></div>
+<div class="markdown-heading"><h3 class="heading-element"><div id="voteOnElections">applyForElections</div></h3><a id="applyforelections-1" class="anchor" aria-label="Permalink: applyForElections" href="#applyforelections-1"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>voteOnAddress (the address of the candidate <strong>CITIZEN</strong> votes)</li>
+</ul>
+<p>pre execution checks:</p>
+<ul>
+<li>has <strong>CITIZEN</strong> role</li>
+<li>
+<strong>validVote</strong>: checks if vote is valid</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> voteOnElections</span></span>(
+    <span class="pl-c1">address</span> <span class="pl-v">voteOnAddress</span>
+) <span class="pl-k">public</span> <span class="pl-en">onlyRole</span>(CITIZEN) <span class="pl-en">validVote</span>(voteOnAddress) {
+    electionVotes[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">=</span> voteOnAddress;
+    electionVoters.<span class="pl-en">push</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>);
+    electionCandidateScores[voteOnAddress]<span class="pl-k">++</span>;
+}</pre></div>
+<div class="markdown-heading"><h3 class="heading-element"><div id="closeElections">closeElections</div></h3><a id="closeelections" class="anchor" aria-label="Permalink: closeElections" href="#closeelections"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>pre execution checks:</p>
+<ul>
+<li>has <strong>ADMINISTRATOR</strong> role</li>
+<li>
+<strong>canCloseElections</strong>: checks if elections end date passed</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> closeElections</span></span>() <span class="pl-k">public</span> <span class="pl-en">onlyRole</span>(ADMINISTRATOR) canCloseElections {
+    <span class="pl-c">// assign roles to the winners</span>
+    <span class="pl-c1">uint256</span> totalVotes <span class="pl-k">=</span> electionVoters.<span class="pl-mi">length</span>;
+    <span class="pl-k">for</span> (<span class="pl-c1">uint</span> i <span class="pl-k">=</span> <span class="pl-c1">0</span>; i <span class="pl-k">&lt;</span> electionCandidates.<span class="pl-mi">length</span>; i<span class="pl-k">++</span>) {
+        <span class="pl-c1">uint256</span> votesOwnedPercentage <span class="pl-k">=</span> ((electionCandidateScores[
+            electionCandidates[i]
+        ] <span class="pl-k">-</span> <span class="pl-c1">1</span>) <span class="pl-k">*</span> <span class="pl-c1">1000</span>) <span class="pl-k">/</span> totalVotes;
+
+        <span class="pl-k">if</span> (votesOwnedPercentage <span class="pl-k">&gt;</span> MINIMUM_PERCENTAGE_OF_ELECTION_VOTES) {
+            <span class="pl-c1">uint256</span> votingCycleTotalCredit <span class="pl-k">=</span> (votesOwnedPercentage <span class="pl-k">-</span>
+                MINIMUM_PERCENTAGE_OF_ELECTION_VOTES <span class="pl-k">*</span>
+                <span class="pl-c1">10</span>) <span class="pl-k">/</span>
+                <span class="pl-c1">100</span> <span class="pl-k">+</span>
+                <span class="pl-c1">1</span>;
+
+            <span class="pl-en">_setupRole</span>(POLITICAL_ACTOR, electionCandidates[i]);
+            politicalActors.<span class="pl-en">push</span>(electionCandidates[i]);
+            politicalActorVotingCredits[
+                electionCandidates[i]
+            ] <span class="pl-k">=</span> votingCycleTotalCredit;
+        }
+
+        <span class="pl-k">delete</span> electionCandidateScores[electionCandidates[i]];
+    }
+
+    electionCandidates <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">address</span>[](<span class="pl-c1">0</span>);
+    electionVoters <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">address</span>[](<span class="pl-c1">0</span>);
+
+    electionsStartDate <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+}</pre></div>
+<p>Decides which candidates have enough number of votes and calculates for them the voting and article publishing credits for the voting cycles and also grants for them <strong>POLITICAL_ACTOR</strong> role.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="getElectionCandidatesSize">getElectionCandidatesSize</div></h3><a id="getelectioncandidatessize" class="anchor" aria-label="Permalink: getElectionCandidatesSize" href="#getelectioncandidatessize"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> getElectionCandidatesSize</span></span>() <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>) {
+    <span class="pl-k">return</span> electionCandidates.<span class="pl-mi">length</span>;
+}</pre></div>
+<p>Returns the number of candidates who applied for elections.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="getElectionVotersSize">getElectionVotersSize</div></h3><a id="getelectionvoterssize" class="anchor" aria-label="Permalink: getElectionVotersSize" href="#getelectionvoterssize"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> getElectionVotersSize</span></span>() <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>) {
+    <span class="pl-k">return</span> electionVoters.<span class="pl-mi">length</span>;
+}</pre></div>
+<p>Returns the number of voters who voted on elections.</p>
+<div class="markdown-heading"><h2 class="heading-element">Functions &gt; Voting</h2><a id="functions--voting" class="anchor" aria-label="Permalink: Functions &gt; Voting" href="#functions--voting"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element"><div id="addKeccak256HashedAnswersToVotingContent">addKeccak256HashedAnswersToVotingContent</div></h3><a id="addkeccak256hashedanswerstovotingcontent" class="anchor" aria-label="Permalink: addKeccak256HashedAnswersToVotingContent" href="#addkeccak256hashedanswerstovotingcontent"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>
+<strong>_votingKey</strong>: the key identify a voting</li>
+<li>
+<strong>_keccak256HashedAnswers</strong>: the hashed answers for content validation</li>
+</ul>
+<p>validation checks:</p>
+<ul>
+<li>only <strong>ADMINISTRATOR</strong>
+</li>
+<li>
+<strong>votingContentQuizIpfsAssigned</strong>: if the content check quiz ipfs reference already assigned.</li>
+<li>
+<strong>enoughContentReadQuizAnswerAdded</strong>: the number of questions passed has to be more than the minimum.</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> addKeccak256HashedAnswersToVotingContent</span></span>(
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>,
+    <span class="pl-c1">bytes32</span>[] <span class="pl-k">memory</span> <span class="pl-v">_keccak256HashedAnswers</span>
+)
+    <span class="pl-k">public</span>
+    <span class="pl-en">onlyRole</span>(ADMINISTRATOR)
+    <span class="pl-en">votingContentQuizIpfsAssigned</span>(_votingKey)
+    <span class="pl-en">enoughContentReadQuizAnswerAdded</span>(_keccak256HashedAnswers)
+{
+    votingContentReadCheckAnswers[_votingKey] <span class="pl-k">=</span> _keccak256HashedAnswers;
+}</pre></div>
+<div class="markdown-heading"><h3 class="heading-element"><div id="approveVoting">approveVoting</div></h3><a id="approvevoting" class="anchor" aria-label="Permalink: approveVoting" href="#approvevoting"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>
+<strong>_votingKey</strong>: the key identify a voting</li>
+</ul>
+<p>validation checks:</p>
+<ul>
+<li>only <strong>ADMINISTRATOR</strong>
+</li>
+<li>
+<strong>votingNotYetStarted</strong>: voting has to be ongoing</li>
+<li>
+<strong>approveAttempt3DaysBeforeVotingStarts</strong>: Make sure the voting approval attempt within 3 days of voting start</li>
+<li>
+<strong>enoughContentReadQuizAnswerAdded</strong>: There are assigned content check answers</li>
+<li>
+<strong>creatorOfVotingRespondedOnArticles</strong>: The voting owner responded on the assigned pro/con articles</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> approveVoting</span></span>(
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>
+)
+    <span class="pl-k">public</span>
+    <span class="pl-en">onlyRole</span>(ADMINISTRATOR)
+    <span class="pl-en">votingNotYetStarted</span>(_votingKey)
+    <span class="pl-en">approveAttempt3DaysBeforeVotingStarts</span>(_votingKey)
+    <span class="pl-en">enoughContentReadQuizAnswerAdded</span>(
+        votingContentReadCheckAnswers[_votingKey]
+    )
+    <span class="pl-en">creatorOfVotingRespondedOnArticles</span>(_votingKey)
+{
+    votings[_votingKey].approved <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+}</pre></div>
+<p>Approves a scheduled upcoming voting.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="assignQuizIpfsHashToVoting">assignQuizIpfsHashToVoting</div></h3><a id="assignquizipfshashtovoting" class="anchor" aria-label="Permalink: assignQuizIpfsHashToVoting" href="#assignquizipfshashtovoting"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>
+<strong>_votingKey</strong>: the key identify a voting</li>
+<li>
+<strong>_quizIpfsHash</strong>: the ipfs reference related to the document contains the assigned questions.</li>
+</ul>
+<p>validation checks:</p>
+<ul>
+<li>only <strong>ADMINISTRATOR</strong>
+</li>
+<li>
+<strong>votingExists</strong>: checks if voting exists</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> assignQuizIpfsHashToVoting</span></span>(
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>,
+    <span class="pl-c1">string</span> <span class="pl-k">memory</span> <span class="pl-v">_quizIpfsHash</span>
+) <span class="pl-k">public</span> <span class="pl-en">onlyRole</span>(ADMINISTRATOR) <span class="pl-en">votingExists</span>(_votingKey) {
+    votings[_votingKey].votingContentCheckQuizIpfsHash <span class="pl-k">=</span> _quizIpfsHash;
+}</pre></div>
+<p>Assign all the content check quiz ipfs reference related to a scheduled voting.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="calculateVoteScore">calculateVoteScore</div></h3><a id="calculatevotescore" class="anchor" aria-label="Permalink: calculateVoteScore" href="#calculatevotescore"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>
+<strong>_votingKey</strong>: the key identify a voting</li>
+<li>
+<strong>_account</strong>: account address of the <strong>CITIZEN</strong>
+</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> calculateVoteScore</span></span>(
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>,
+    <span class="pl-c1">address</span> <span class="pl-v">_account</span>
+) <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint</span>) {
+    <span class="pl-c1">uint</span> voteScore <span class="pl-k">=</span> MIN_VOTE_SCORE;
+
+    <span class="pl-c1">uint</span> completedArticlesLength <span class="pl-k">=</span> articlesCompleted[_account].<span class="pl-mi">length</span>;
+
+    <span class="pl-c1">uint</span> numOfVoteOnACompletedArticleValue <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+    <span class="pl-c1">uint</span> numOfVoteOnBCompletedArticleValue <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+
+    <span class="pl-c1">uint</span> numOfVoteOnACompletedResponseValue <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+    <span class="pl-c1">uint</span> numOfVoteOnBCompletedResponseValue <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+
+    <span class="pl-k">for</span> (<span class="pl-c1">uint</span> i <span class="pl-k">=</span> <span class="pl-c1">0</span>; i <span class="pl-k">&lt;</span> completedArticlesLength; i<span class="pl-k">++</span>) {
+        ProConArticle <span class="pl-k">memory</span> completedProConArticle <span class="pl-k">=</span> proConArticles[
+            _votingKey
+        ][articlesCompleted[_account][i]];
+        <span class="pl-k">if</span> (completedProConArticle.votingKey <span class="pl-k">==</span> _votingKey) {
+            <span class="pl-k">if</span> (completedProConArticle.isVoteOnA) {
+                numOfVoteOnACompletedArticleValue <span class="pl-k">+=</span> <span class="pl-c1">1</span>;
+            } <span class="pl-k">else</span> {
+                numOfVoteOnBCompletedArticleValue <span class="pl-k">+=</span> <span class="pl-c1">1</span>;
+            }
+        }
+    }
+
+    <span class="pl-c1">uint</span> completedArticlesResponseLength <span class="pl-k">=</span> articlesResponseCompleted[
+        _account
+    ].<span class="pl-mi">length</span>;
+    <span class="pl-k">for</span> (<span class="pl-c1">uint</span> u <span class="pl-k">=</span> <span class="pl-c1">0</span>; u <span class="pl-k">&lt;</span> completedArticlesResponseLength; u<span class="pl-k">++</span>) {
+        ProConArticle
+            <span class="pl-k">memory</span> completedProConArticleWithResponse <span class="pl-k">=</span> proConArticles[
+                _votingKey
+            ][articlesResponseCompleted[_account][u]];
+        <span class="pl-k">if</span> (completedProConArticleWithResponse.votingKey <span class="pl-k">==</span> _votingKey) {
+            <span class="pl-k">if</span> (completedProConArticleWithResponse.isVoteOnA) {
+                numOfVoteOnACompletedResponseValue <span class="pl-k">+=</span> <span class="pl-c1">1</span>;
+            } <span class="pl-k">else</span> {
+                numOfVoteOnBCompletedResponseValue <span class="pl-k">+=</span> <span class="pl-c1">1</span>;
+            }
+        }
+    }
+
+    <span class="pl-c1">uint</span> noPairArticleCompleteCount <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+
+    <span class="pl-k">if</span> (
+        numOfVoteOnACompletedArticleValue <span class="pl-k">&gt;</span>
+        numOfVoteOnBCompletedArticleValue
+    ) {
+        noPairArticleCompleteCount <span class="pl-k">=</span> (numOfVoteOnACompletedArticleValue <span class="pl-k">-</span>
+            numOfVoteOnBCompletedArticleValue);
+    } <span class="pl-k">else</span> {
+        noPairArticleCompleteCount <span class="pl-k">=</span> (numOfVoteOnBCompletedArticleValue <span class="pl-k">-</span>
+            numOfVoteOnACompletedArticleValue);
+    }
+
+    voteScore <span class="pl-k">+=</span>
+        ((numOfVoteOnACompletedArticleValue <span class="pl-k">+</span>
+            numOfVoteOnBCompletedArticleValue <span class="pl-k">-</span>
+            noPairArticleCompleteCount) <span class="pl-k">/</span> <span class="pl-c1">2</span>) <span class="pl-k">*</span>
+        <span class="pl-c1">25</span> <span class="pl-k">+</span>
+        (noPairArticleCompleteCount <span class="pl-k">*</span> <span class="pl-c1">5</span>);
+
+    <span class="pl-c">// add the balanced way calculated scores after completed responses</span>
+    <span class="pl-c1">uint</span> noPairResponseCompleteCount <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+
+    <span class="pl-k">if</span> (
+        numOfVoteOnACompletedResponseValue <span class="pl-k">&gt;</span>
+        numOfVoteOnBCompletedResponseValue
+    ) {
+        noPairResponseCompleteCount <span class="pl-k">=</span> (numOfVoteOnACompletedResponseValue <span class="pl-k">-</span>
+            numOfVoteOnBCompletedResponseValue);
+    } <span class="pl-k">else</span> {
+        noPairResponseCompleteCount <span class="pl-k">=</span> (numOfVoteOnBCompletedResponseValue <span class="pl-k">-</span>
+            numOfVoteOnACompletedResponseValue);
+    }
+
+    voteScore <span class="pl-k">+=</span>
+        ((numOfVoteOnACompletedResponseValue <span class="pl-k">+</span>
+            numOfVoteOnBCompletedResponseValue <span class="pl-k">-</span>
+            noPairResponseCompleteCount) <span class="pl-k">/</span> <span class="pl-c1">2</span>) <span class="pl-k">*</span>
+        <span class="pl-c1">10</span> <span class="pl-k">+</span>
+        (noPairResponseCompleteCount <span class="pl-k">*</span> <span class="pl-c1">2</span>);
+
+    <span class="pl-k">return</span> voteScore;
+}</pre></div>
+<p>Calculates the total voting score of a <strong>CITIZEN</strong>, considering all the "completed" (read) articles, article related responses, pro : con ratio.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="isVotingWon">isVotingWon</div></h3><a id="isvotingwon" class="anchor" aria-label="Permalink: isVotingWon" href="#isvotingwon"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>
+<strong>_votingKey</strong>: identifies the voting.</li>
+</ul>
+<p>validation checks:</p>
+<ul>
+<li>
+<strong>votingNotFinished</strong>: voting not finished yet</li>
+<li>
+<strong>votingApproved</strong>: voting approved</li>
+<li>
+<strong>enoughVotesArrived</strong>: enough votes arrived</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> isVotingWon</span></span>(
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>
+)
+    <span class="pl-k">public</span>
+    <span class="pl-k">view</span>
+    <span class="pl-en">votingNotFinished</span>(_votingKey)
+    <span class="pl-en">votingApproved</span>(_votingKey)
+    <span class="pl-en">enoughVotesArrived</span>(_votingKey)
+    <span class="pl-k">returns</span> (<span class="pl-c1">bool</span>)
+{
+    <span class="pl-k">return</span>
+        votings[_votingKey].voteOnAScore <span class="pl-k">&gt;=</span>
+        votings[_votingKey].voteOnBScore;
+}</pre></div>
+<p>Checks if the actual voting win or lose.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="scheduleNewVoting">scheduleNewVoting</div></h3><a id="schedulenewvoting" class="anchor" aria-label="Permalink: scheduleNewVoting" href="#schedulenewvoting"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>
+<strong>_contentIpfsHash</strong>: the ipfs hash reference of the voting's content</li>
+<li>
+<strong>_startDate</strong>: when the voting can start</li>
+<li>
+<strong>_budget</strong>: target budget of the voting</li>
+</ul>
+<p>validation checks:</p>
+<ul>
+<li>only <strong>POLITICAL_ACTOR</strong>
+</li>
+<li>
+<strong>votingPeriodIsActive</strong>: Checks if the actual voting period is ongoing</li>
+<li>
+<strong>newVotingScheduledAtLeast10daysAhead</strong>: The start date of the voting is 10 days or more from now.</li>
+<li>
+<strong>newVotingScheduledMaximum30daysAhead</strong>: The start date of the voting is 30 days or less from now.</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> scheduleNewVoting</span></span>(
+    <span class="pl-c1">string</span> <span class="pl-k">calldata</span> <span class="pl-v">_contentIpfsHash</span>,
+    <span class="pl-c1">uint</span> <span class="pl-v">_startDate</span>,
+    <span class="pl-c1">uint</span> <span class="pl-v">_budget</span>
+)
+    <span class="pl-k">public</span>
+    <span class="pl-en">onlyRole</span>(POLITICAL_ACTOR)
+    votingPeriodIsActive
+    <span class="pl-en">newVotingScheduledAtLeast10daysAhead</span>(_startDate)
+    <span class="pl-en">newVotingScheduledMaximum30daysAhead</span>(_startDate)
+{
+    <span class="pl-c1">uint</span> timePassed <span class="pl-k">=</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">-</span> firstVotingCycleStartDate;
+    <span class="pl-c1">uint</span> votingCycleCount <span class="pl-k">=</span> <span class="pl-c1">uint</span>(timePassed <span class="pl-k">/</span> VOTING_CYCLE_INTERVAL);
+
+    <span class="pl-k">if</span> (
+        timePassed <span class="pl-k">-</span> votingCycleCount <span class="pl-k">*</span> VOTING_CYCLE_INTERVAL <span class="pl-k">&gt;</span>
+        VOTING_CYCLE_INTERVAL <span class="pl-k">-</span> NEW_VOTING_PERIOD_MIN_SCHEDULE_AHEAD_TIME
+    ) {
+        <span class="pl-k">revert</span> <span class="pl-en">CantStartNewVointg10daysOrLessBeforeEndOfCycle</span>();
+    }
+
+    <span class="pl-k">if</span> (
+        politicalActorVotingCredits[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">&lt;=</span>
+        votingCycleStartVoteCount[votingCycleCount][<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>]
+    ) {
+        <span class="pl-k">revert</span> <span class="pl-en">AccountRanOutOfVotingCreditsForThisVotingCycle</span>();
+    }
+
+    votingCycleStartVoteCount[votingCycleCount][<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>]<span class="pl-k">++</span>;
+
+    <span class="pl-c1">bytes32</span> _votingKey <span class="pl-k">=</span> <span class="pl-c1">keccak256</span>(
+        <span class="pl-c1">abi.encodePacked</span>(<span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span>, <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, _contentIpfsHash)
+    );
+
+    votings[_votingKey].budget <span class="pl-k">=</span> _budget;
+    votings[_votingKey].key <span class="pl-k">=</span> _votingKey;
+    votings[_votingKey].creator <span class="pl-k">=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>;
+    votings[_votingKey].contentIpfsHash <span class="pl-k">=</span> _contentIpfsHash;
+    votings[_votingKey].startDate <span class="pl-k">=</span> _startDate;
+    votings[_votingKey].voteOnAScore <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+    votings[_votingKey].voteOnBScore <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+    votings[_votingKey].actualNumberOfCitizens <span class="pl-k">=</span> citizens.<span class="pl-mi">length</span>;
+
+    <span class="pl-c1">bool</span> votingCycleIndexAlreadyAdded <span class="pl-k">=</span> <span class="pl-c1">false</span>;
+    <span class="pl-k">for</span> (<span class="pl-c1">uint</span> i <span class="pl-k">=</span> <span class="pl-c1">0</span>; i <span class="pl-k">&lt;</span> votingCycleIndexes.<span class="pl-mi">length</span>; i<span class="pl-k">++</span>) {
+        <span class="pl-k">if</span> (votingCycleCount <span class="pl-k">==</span> votingCycleIndexes[i]) {
+            votingCycleIndexAlreadyAdded <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+            <span class="pl-k">break</span>;
+        }
+    }
+
+    <span class="pl-k">if</span> (<span class="pl-k">!</span>votingCycleIndexAlreadyAdded) {
+        votingCycleIndexes.<span class="pl-en">push</span>(votingCycleCount);
+    }
+
+    votingKeys.<span class="pl-en">push</span>(_votingKey);
+}</pre></div>
+<p><strong>POLITICAL_ACTOR</strong> by using 1 voting start credit can schedule new voting in the actual ongoing voting period.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="setFirstVotingCycleStartDate">setFirstVotingCycleStartDate</div></h3><a id="setfirstvotingcyclestartdate" class="anchor" aria-label="Permalink: setFirstVotingCycleStartDate" href="#setfirstvotingcyclestartdate"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>
+<strong>_firstVotingCycleStartDate</strong>: the first voting cycle start date</li>
+</ul>
+<p>validation checks:</p>
+<ul>
+<li>only <strong>ADMINISTRATOR</strong>
+</li>
+<li>
+<strong>firstVotingCycleStartDateIsInTheFuture</strong>: Checks if the first voting cycle start date is in the future.</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> setFirstVotingCycleStartDate</span></span>(
+    <span class="pl-c1">uint</span> <span class="pl-v">_firstVotingCycleStartDate</span>
+)
+    <span class="pl-k">public</span>
+    <span class="pl-en">onlyRole</span>(ADMINISTRATOR)
+    <span class="pl-en">firstVotingCycleStartDateIsInTheFuture</span>(_firstVotingCycleStartDate)
+{
+    <span class="pl-c">// reset votingCycleStartVoteCount;</span>
+    <span class="pl-k">for</span> (<span class="pl-c1">uint</span> i <span class="pl-k">=</span> <span class="pl-c1">0</span>; i <span class="pl-k">&lt;</span> votingCycleIndexes.<span class="pl-mi">length</span>; i<span class="pl-k">++</span>) {
+        <span class="pl-k">for</span> (<span class="pl-c1">uint</span> u <span class="pl-k">=</span> <span class="pl-c1">0</span>; u <span class="pl-k">&lt;</span> politicalActors.<span class="pl-mi">length</span>; u<span class="pl-k">++</span>) {
+            <span class="pl-k">delete</span> votingCycleStartVoteCount[votingCycleIndexes[i]][
+                politicalActors[u]
+            ];
+        }
+    }
+
+    votingCycleIndexes <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">uint</span>[](<span class="pl-c1">0</span>);
+
+    firstVotingCycleStartDate <span class="pl-k">=</span> _firstVotingCycleStartDate;
+}</pre></div>
+<p><strong>ADMINISTRATOR</strong> can declare the beginning date of the voting cycles start. After that cycles repeat in a fixed 30 days interval.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="unlockVotingBudget">unlockVotingBudget</div></h3><a id="unlockvotingbudget" class="anchor" aria-label="Permalink: unlockVotingBudget" href="#unlockvotingbudget"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>
+<strong>_votingKey</strong>: identifies the voting.</li>
+</ul>
+<p>validation checks:</p>
+<ul>
+<li>only <strong>POLITICAL_ACTOR</strong>
+</li>
+<li>
+<strong>votingBelongsToSender</strong>: voting belongs to the sender (who created the voting) address</li>
+<li>
+<strong>votingWon</strong>: if voting won (option A get more than 50% of votes).</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> unlockVotingBudget</span></span>(
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>
+)
+    <span class="pl-k">public</span>
+    <span class="pl-en">onlyRole</span>(POLITICAL_ACTOR)
+    <span class="pl-en">votingBelongsToSender</span>(_votingKey)
+    <span class="pl-en">votingWon</span>(_votingKey)
+{
+    (<span class="pl-c1">bool</span> <span class="pl-v">callSuccess</span>, ) <span class="pl-k">=</span> <span class="pl-c1">payable</span>(<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>).<span class="pl-c1">call</span>{
+        value: <span class="pl-en">getVoting</span>(_votingKey).budget
+    }(<span class="pl-s">""</span>);
+    <span class="pl-k">if</span> (<span class="pl-k">!</span>callSuccess) {
+        <span class="pl-k">revert</span>();
+    }
+
+    votings[_votingKey].budget <span class="pl-k">=</span> <span class="pl-c1">0</span>; <span class="pl-c">// make sure no more money can be requested</span>
+}</pre></div>
+<p><strong>POLITICAL_ACTOR</strong> can unlock his voting target budget and get the amount of crypto he asked for.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="voteOnVoting">voteOnVoting</div></h3><a id="voteonvoting" class="anchor" aria-label="Permalink: voteOnVoting" href="#voteonvoting"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>
+<strong>_votingKey</strong>: identifies the voting.</li>
+<li>
+<strong>_voteOnA</strong>: vote on A (yes) or B (no).</li>
+</ul>
+<p>validation checks:</p>
+<ul>
+<li>only <strong>CITIZEN</strong>
+</li>
+<li>
+<strong>votingIsOngoing</strong>: voting has to ongoing</li>
+<li>
+<strong>votingApproved</strong>: voting approved (by <strong>ADMINISTRATOR</strong>)</li>
+<li>
+<strong>contentCheckQuizCompleted</strong>: vote minimal requirement, the content read check quiz is completed (by the voter)</li>
+<li>
+<strong>notVotedYetOnThisVoting</strong>: voter not voted already</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> voteOnVoting</span></span>(
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>,
+    <span class="pl-c1">bool</span> <span class="pl-v">_voteOnA</span>
+)
+    <span class="pl-k">public</span>
+    <span class="pl-en">onlyRole</span>(CITIZEN)
+    <span class="pl-en">votingIsOngoing</span>(_votingKey)
+    <span class="pl-en">votingApproved</span>(_votingKey)
+    <span class="pl-en">contentCheckQuizCompleted</span>(_votingKey)
+    <span class="pl-en">notVotedYetOnThisVoting</span>(_votingKey)
+{
+    <span class="pl-c">// calculate vote score</span>
+    <span class="pl-c1">uint</span> voteScore <span class="pl-k">=</span> <span class="pl-en">calculateVoteScore</span>(_votingKey, <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>);
+
+    <span class="pl-c">// add new vote</span>
+    <span class="pl-k">if</span> (_voteOnA) {
+        votings[_votingKey].voteOnAScore <span class="pl-k">+=</span> voteScore;
+    } <span class="pl-k">else</span> {
+        votings[_votingKey].voteOnBScore <span class="pl-k">+=</span> voteScore;
+    }
+
+    votings[_votingKey].voteCount<span class="pl-k">++</span>;
+    votes[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>][_votingKey].voted <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+}</pre></div>
+<p><strong>CITIZEN</strong> can vote on an ongoing voting.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="getVoting">getVoting</div></h3><a id="getvoting" class="anchor" aria-label="Permalink: getVoting" href="#getvoting"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>
+<strong>_votingKey</strong>: identifies the voting.</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> getVoting</span></span>(<span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>) <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (Voting <span class="pl-k">memory</span>) {
+    <span class="pl-k">return</span> votings[_votingKey];
+}</pre></div>
+<p>Returns specific voting.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="getVotingKeysLength">getVotingKeysLength</div></h3><a id="getvotingkeyslength" class="anchor" aria-label="Permalink: getVotingKeysLength" href="#getvotingkeyslength"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> getVotingKeysLength</span></span>() <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint</span>) {
+    <span class="pl-k">return</span> votingKeys.<span class="pl-mi">length</span>;
+}</pre></div>
+<p>Returns the number of votings (voting keys) exists.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="getVotingCycleIndexesSize">getVotingCycleIndexesSize</div></h3><a id="getvotingcycleindexessize" class="anchor" aria-label="Permalink: getVotingCycleIndexesSize" href="#getvotingcycleindexessize"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> getVotingCycleIndexesSize</span></span>() <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint</span>) {
+    <span class="pl-k">return</span> votingCycleIndexes.<span class="pl-mi">length</span>;
+}</pre></div>
+<p>Returns the voting number of cycle indexes.</p>
+<div class="markdown-heading"><h2 class="heading-element">Functions &gt; Contents/quizzes</h2><a id="functions--contentsquizzes" class="anchor" aria-label="Permalink: Functions &gt; Contents/quizzes" href="#functions--contentsquizzes"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element"><div id="addKeccak256HashedAnswersToArticle">addKeccak256HashedAnswersToArticle</div></h3><a id="addkeccak256hashedanswerstoarticle" class="anchor" aria-label="Permalink: addKeccak256HashedAnswersToArticle" href="#addkeccak256hashedanswerstoarticle"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>
+<strong>_votingKey</strong>: identifies the voting.</li>
+<li>
+<strong>_articleKey</strong>: identifies the article assigned to voting</li>
+<li>
+<strong>_keccak256HashedAnswers</strong>: article content check quiz hashed answers</li>
+</ul>
+<p>validation checks:</p>
+<ul>
+<li>only <strong>ADMINISTRATOR</strong>
+</li>
+<li>
+<strong>hasArticleContentIpfsHashAssigned</strong>: has ipfs content check document ipfs hash reference assigned to the article</li>
+<li>
+<strong>enoughContentReadQuizAnswerAdded</strong>: number of passed answers meet with minimum answer requirement.</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> addKeccak256HashedAnswersToArticle</span></span>(
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>,
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_articleKey</span>,
+    <span class="pl-c1">bytes32</span>[] <span class="pl-k">memory</span> <span class="pl-v">_keccak256HashedAnswers</span>
+)
+    <span class="pl-k">public</span>
+    <span class="pl-en">onlyRole</span>(ADMINISTRATOR)
+    <span class="pl-en">hasArticleContentIpfsHashAssigned</span>(_votingKey, _articleKey)
+    <span class="pl-en">enoughContentReadQuizAnswerAdded</span>(_keccak256HashedAnswers)
+{
+    proConArticles[_votingKey][_articleKey].isArticleApproved <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+    articleContentReadCheckAnswers[_articleKey] <span class="pl-k">=</span> _keccak256HashedAnswers;
+}</pre></div>
+<p><strong>ADMINISTRATOR</strong> can add N number of answer hashes related article content check.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="addKeccak256HashedAnswersToArticleResponse">addKeccak256HashedAnswersToArticleResponse</div></h3><a id="addkeccak256hashedanswerstoarticleresponse" class="anchor" aria-label="Permalink: addKeccak256HashedAnswersToArticleResponse" href="#addkeccak256hashedanswerstoarticleresponse"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>
+<strong>_votingKey</strong>: identifies the voting.</li>
+<li>
+<strong>_articleKey</strong>: identifies the article's response assigned to article</li>
+<li>
+<strong>_keccak256HashedAnswers</strong>: article's response content check quiz hashed answers</li>
+</ul>
+<p>validation checks:</p>
+<ul>
+<li>only <strong>ADMINISTRATOR</strong>
+</li>
+<li>
+<strong>articleShouldExists</strong>: article should exists</li>
+<li>
+<strong>hasArticleResponseAssigned</strong>: article response exists</li>
+<li>
+<strong>hasArticleResponseContentCheckIpfsHash</strong>: article response content check ipfs hash reference assigned</li>
+<li>
+<strong>votingNotYetStarted</strong>: voting not started yet</li>
+<li>
+<strong>enoughContentReadQuizAnswerAdded</strong>: the number of passed answers met with minimum requirement</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> addKeccak256HashedAnswersToArticleResponse</span></span>(
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>,
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_articleKey</span>,
+    <span class="pl-c1">bytes32</span>[] <span class="pl-k">memory</span> <span class="pl-v">_keccak256HashedAnswers</span>
+)
+    <span class="pl-k">public</span>
+    <span class="pl-en">onlyRole</span>(ADMINISTRATOR)
+    <span class="pl-en">articleShouldExists</span>(_votingKey, _articleKey)
+    <span class="pl-en">hasArticleResponseAssigned</span>(_votingKey, _articleKey)
+    <span class="pl-en">hasArticleResponseContentCheckIpfsHash</span>(_votingKey, _articleKey)
+    <span class="pl-en">votingNotYetStarted</span>(_votingKey)
+    <span class="pl-en">enoughContentReadQuizAnswerAdded</span>(_keccak256HashedAnswers)
+{
+    articleContentResponseReadCheckAnswers[
+        _articleKey
+    ] <span class="pl-k">=</span> _keccak256HashedAnswers;
+    proConArticles[_votingKey][_articleKey].isResponseApproved <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+}</pre></div>
+<p><strong>ADMINISTRATOR</strong> can assign to article response content check quiz related answers</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="assignQuizIpfsHashToArticleOrResponse">assignQuizIpfsHashToArticleOrResponse</div></h3><a id="assignquizipfshashtoarticleorresponse" class="anchor" aria-label="Permalink: assignQuizIpfsHashToArticleOrResponse" href="#assignquizipfshashtoarticleorresponse"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>
+<strong>_votingKey</strong>: identifies the voting.</li>
+<li>
+<strong>_articleKey</strong>: identifies the article assigned to voting</li>
+<li>
+<strong>_quizIpfsHash</strong>: quiz ipfs hash reference</li>
+<li>
+<strong>assignToArticleContent</strong>: decides if ipfs hash goes to a article or a article response</li>
+</ul>
+<p>validation checks:</p>
+<ul>
+<li>only <strong>ADMINISTRATOR</strong>
+</li>
+<li>
+<strong>articleShouldExists</strong>: article should exists</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> assignQuizIpfsHashToArticleOrResponse</span></span>(
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>,
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_articleKey</span>,
+    <span class="pl-c1">string</span> <span class="pl-k">memory</span> <span class="pl-v">_quizIpfsHash</span>,
+    <span class="pl-c1">bool</span> <span class="pl-v">assignToArticleContent</span>
+)
+    <span class="pl-k">public</span>
+    <span class="pl-en">onlyRole</span>(ADMINISTRATOR)
+    <span class="pl-en">articleShouldExists</span>(_votingKey, _articleKey)
+{
+    <span class="pl-k">if</span> (assignToArticleContent) {
+        proConArticles[_votingKey][_articleKey]
+            .articleContentCheckQuizIpfsHash <span class="pl-k">=</span> _quizIpfsHash;
+    } <span class="pl-k">else</span> {
+        proConArticles[_votingKey][_articleKey]
+            .responseContentCheckQuizIpfsHash <span class="pl-k">=</span> _quizIpfsHash;
+    }
+}</pre></div>
+<p><strong>ADMINISTRATOR</strong> assigns ipfs hash quiz document to article or response.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="completeContentReadQuiz">completeContentReadQuiz</div></h3><a id="completecontentreadquiz" class="anchor" aria-label="Permalink: completeContentReadQuiz" href="#completecontentreadquiz"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>
+<strong>contentType</strong>: identifies voting content, article or article response.</li>
+<li>
+<strong>_votingKey</strong>: identifies the voting.</li>
+<li>
+<strong>_articleKey</strong>: identifies the article assigned to voting</li>
+<li>
+<strong>_answers</strong>: content check answer hashes.</li>
+</ul>
+<p>validation checks:</p>
+<ul>
+<li>only <strong>CITIZEN</strong>
+</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> completeContentReadQuiz</span></span>(
+    <span class="pl-c1">uint</span> <span class="pl-v">contentType</span>,
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>,
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_articleKey</span>,
+    <span class="pl-c1">string</span>[] <span class="pl-k">memory</span> <span class="pl-v">_answers</span>
+) <span class="pl-k">public</span> <span class="pl-en">onlyRole</span>(CITIZEN) {
+    <span class="pl-c1">uint</span>[] <span class="pl-k">memory</span> answerIndexes;
+    <span class="pl-c1">bool</span> isCorrect;
+
+    <span class="pl-c">// voting</span>
+    <span class="pl-k">if</span> (contentType <span class="pl-k">==</span> <span class="pl-c1">1</span>) {
+        answerIndexes <span class="pl-k">=</span> <span class="pl-en">getAccountVotingQuizAnswerIndexes</span>(
+            _votingKey,
+            <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>
+        );
+
+        isCorrect <span class="pl-k">=</span> <span class="pl-en">isContentReadQuizCorrect</span>(
+            answerIndexes,
+            votingContentReadCheckAnswers[_votingKey],
+            _answers
+        );
+        votes[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>][_votingKey].isContentCompleted <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+    }
+    <span class="pl-c">// article</span>
+    <span class="pl-k">else</span> <span class="pl-k">if</span> (contentType <span class="pl-k">==</span> <span class="pl-c1">2</span>) {
+        answerIndexes <span class="pl-k">=</span> <span class="pl-en">getAccountArticleQuizAnswerIndexes</span>(
+            _votingKey,
+            _articleKey,
+            <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>
+        );
+
+        isCorrect <span class="pl-k">=</span> <span class="pl-en">isContentReadQuizCorrect</span>(
+            answerIndexes,
+            articleContentReadCheckAnswers[_articleKey],
+            _answers
+        );
+        articlesCompleted[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>].<span class="pl-en">push</span>(_articleKey);
+        <span class="pl-c">// article respond</span>
+    } <span class="pl-k">else</span> <span class="pl-k">if</span> (contentType <span class="pl-k">==</span> <span class="pl-c1">3</span>) {
+        answerIndexes <span class="pl-k">=</span> <span class="pl-en">getAccountArticleResponseQuizAnswerIndexes</span>(
+            _votingKey,
+            _articleKey,
+            <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>
+        );
+
+        isCorrect <span class="pl-k">=</span> <span class="pl-en">isContentReadQuizCorrect</span>(
+            answerIndexes,
+            articleContentResponseReadCheckAnswers[_articleKey],
+            _answers
+        );
+
+        articlesResponseCompleted[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>].<span class="pl-en">push</span>(_articleKey);
+    }
+
+    <span class="pl-k">require</span>(isCorrect, <span class="pl-s">"<span class="pl-s">Some of your provided answers are wrong</span>"</span>);
+}</pre></div>
+<p><strong>CITIZEN</strong> can complete any kind of voting or article or article response related content check quiz by providing the correct answers.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="isContentReadQuizCorrect">isContentReadQuizCorrect</div></h3><a id="iscontentreadquizcorrect" class="anchor" aria-label="Permalink: isContentReadQuizCorrect" href="#iscontentreadquizcorrect"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>
+<strong>_answerIndexes</strong>: the indexes of answers</li>
+<li>
+<strong>_readCheckAnswers</strong>: the answers related to the content quiz</li>
+<li>
+<strong>_answers</strong>: <strong>CITIZEN</strong> provided answers</li>
+</ul>
+<p>validation checks:</p>
+<ul>
+<li>only <strong>CITIZEN</strong>
+</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> isContentReadQuizCorrect</span></span>(
+    <span class="pl-c1">uint</span>[] <span class="pl-k">memory</span> <span class="pl-v">_answerIndexes</span>,
+    <span class="pl-c1">bytes32</span>[] <span class="pl-k">memory</span> <span class="pl-v">_readCheckAnswers</span>,
+    <span class="pl-c1">string</span>[] <span class="pl-k">memory</span> <span class="pl-v">_answers</span>
+) <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-en">onlyRole</span>(CITIZEN) <span class="pl-k">returns</span> (<span class="pl-c1">bool</span>) {
+    <span class="pl-c1">bool</span> areAnswersCorrect <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+
+    <span class="pl-k">for</span> (<span class="pl-c1">uint</span> i <span class="pl-k">=</span> <span class="pl-c1">0</span>; i <span class="pl-k">&lt;</span> _answerIndexes.<span class="pl-mi">length</span>; i<span class="pl-k">++</span>) {
+        <span class="pl-k">if</span> (
+            _readCheckAnswers[_answerIndexes[i] <span class="pl-k">-</span> <span class="pl-c1">1</span>] <span class="pl-k">!=</span>
+            <span class="pl-c1">keccak256</span>(<span class="pl-c1">bytes</span>(_answers[i]))
+        ) {
+            areAnswersCorrect <span class="pl-k">=</span> <span class="pl-c1">false</span>;
+        }
+    }
+
+    <span class="pl-k">return</span> areAnswersCorrect;
+}</pre></div>
+<p>Checks if related to any content quiz answers the <strong>CITIZEN</strong> provided answers are correct.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="publishProConArticle">publishProConArticle</div></h3><a id="publishproconarticle" class="anchor" aria-label="Permalink: publishProConArticle" href="#publishproconarticle"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>
+<strong>_votingKey</strong>: identifies the voting.</li>
+<li>
+<strong>_ipfsHash</strong>: article's content ipfs hash</li>
+<li>
+<strong>_isVoteOnA</strong>: article supported voting outcome</li>
+</ul>
+<p>validation checks:</p>
+<ul>
+<li>only <strong>POLITICAL_ACTOR</strong>
+</li>
+<li>
+<strong>hasCreditsLeftToPublishArticle</strong>: <strong>POLITICAL_ACTOR</strong> has to have article publish credits left</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> publishProConArticle</span></span>(
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>,
+    <span class="pl-c1">string</span> <span class="pl-k">memory</span> <span class="pl-v">_ipfsHash</span>,
+    <span class="pl-c1">bool</span> <span class="pl-v">_isVoteOnA</span>
+)
+    <span class="pl-k">public</span>
+    <span class="pl-en">onlyRole</span>(POLITICAL_ACTOR)
+    <span class="pl-en">hasCreditsLeftToPublishArticle</span>(_votingKey)
+{
+    <span class="pl-c1">bytes32</span> articleKey <span class="pl-k">=</span> <span class="pl-c1">keccak256</span>(
+        <span class="pl-c1">abi.encodePacked</span>(<span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span>, <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>, _ipfsHash)
+    );
+
+    proConArticles[_votingKey][articleKey] <span class="pl-k">=</span> <span class="pl-en">ProConArticle</span>(
+        _votingKey,
+        <span class="pl-c1">false</span>,
+        <span class="pl-c1">false</span>,
+        <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>,
+        _ipfsHash,
+        _isVoteOnA,
+        <span class="pl-s">""</span>,
+        <span class="pl-s">""</span>,
+        <span class="pl-s">""</span>
+    );
+    articleKeys.<span class="pl-en">push</span>(articleKey);
+    publishArticleToVotingsCount[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>][_votingKey]<span class="pl-k">++</span>;
+}</pre></div>
+<p><strong>POLITICAL_ACTOR</strong> cab publish to a specified ongoing voting a pro/con article.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="publishProConArticleResponse">publishProConArticleResponse</div></h3><a id="publishproconarticleresponse" class="anchor" aria-label="Permalink: publishProConArticleResponse" href="#publishproconarticleresponse"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>
+<strong>contentType</strong>: identifies voting content, article or article response.</li>
+<li>
+<strong>_votingKey</strong>: identifies the voting.</li>
+<li>
+<strong>_proConArticleKey</strong>: identifies the article</li>
+<li>
+<strong>_ipfsHash</strong>: ipfs hash reference of the response content</li>
+</ul>
+<p>validation checks:</p>
+<ul>
+<li>only <strong>POLITICAL_ACTOR</strong>
+</li>
+<li>
+<strong>votingNotYetStarted</strong>: voting not yet started</li>
+<li>
+<strong>criticisedArticleRelatedToYourVoting</strong>: article related to the voting you own.</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> publishProConArticleResponse</span></span>(
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>,
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_proConArticleKey</span>,
+    <span class="pl-c1">string</span> <span class="pl-k">memory</span> <span class="pl-v">_ipfsHash</span>
+)
+    <span class="pl-k">public</span>
+    <span class="pl-en">onlyRole</span>(POLITICAL_ACTOR)
+    <span class="pl-en">votingNotYetStarted</span>(_votingKey)
+    <span class="pl-en">criticisedArticleRelatedToYourVoting</span>(_votingKey, _proConArticleKey)
+{
+    proConArticles[_votingKey][_proConArticleKey]
+        .responseStatementIpfsHash <span class="pl-k">=</span> _ipfsHash;
+}</pre></div>
+<p><strong>POLITICAL_ACTOR</strong> can publish his response on articles assigned to his scheduled voting.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="getAccountArticleQuizAnswerIndexes">getAccountArticleQuizAnswerIndexes</div></h3><a id="getaccountarticlequizanswerindexes" class="anchor" aria-label="Permalink: getAccountArticleQuizAnswerIndexes" href="#getaccountarticlequizanswerindexes"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>
+<strong>_votingKey</strong>: identifies the voting</li>
+<li>
+<strong>_articleKey</strong>: identifies the article assigned to voting</li>
+<li>
+<strong>_account</strong>: account address</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> getAccountArticleQuizAnswerIndexes</span></span>(
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>,
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_articleKey</span>,
+    <span class="pl-c1">address</span> <span class="pl-v">_account</span>
+) <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint</span>[] <span class="pl-k">memory</span>) {
+    <span class="pl-k">return</span>
+        <span class="pl-en">getAccountQuizAnswerIndexes</span>(
+            proConArticles[_votingKey][_articleKey]
+                .articleContentCheckQuizIpfsHash,
+            proConArticles[_votingKey][_articleKey].articleIpfsHash,
+            votings[_votingKey].startDate,
+            articleContentReadCheckAnswers[_articleKey].<span class="pl-mi">length</span>,
+            CONTENT_CHECK_ASKED_NUM_OF_QUESTIONS,
+            _account
+        );
+}</pre></div>
+<p>Returns the account uniquely related combination answer indexes what assigned to article content.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="getAccountArticleResponseQuizAnswerIndexes">getAccountArticleResponseQuizAnswerIndexes</div></h3><a id="getaccountarticleresponsequizanswerindexes" class="anchor" aria-label="Permalink: getAccountArticleResponseQuizAnswerIndexes" href="#getaccountarticleresponsequizanswerindexes"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>
+<strong>_votingKey</strong>: identifies the voting</li>
+<li>
+<strong>_articleKey</strong>: identifies the article assigned to voting</li>
+<li>
+<strong>_account</strong>: account address</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> getAccountArticleResponseQuizAnswerIndexes</span></span>(
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>,
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_articleKey</span>,
+    <span class="pl-c1">address</span> <span class="pl-v">_account</span>
+) <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint</span>[] <span class="pl-k">memory</span>) {
+    <span class="pl-k">return</span>
+        <span class="pl-en">getAccountQuizAnswerIndexes</span>(
+            proConArticles[_votingKey][_articleKey]
+                .responseContentCheckQuizIpfsHash,
+            proConArticles[_votingKey][_articleKey]
+                .responseStatementIpfsHash,
+            votings[_votingKey].startDate,
+            articleContentResponseReadCheckAnswers[_articleKey].<span class="pl-mi">length</span>,
+            CONTENT_CHECK_ASKED_NUM_OF_QUESTIONS,
+            _account
+        );
+}</pre></div>
+<p>Returns the account uniquely related combination answer indexes what assigned to article response content.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="getAccountQuizAnswerIndexes">getAccountQuizAnswerIndexes</div></h3><a id="getaccountquizanswerindexes" class="anchor" aria-label="Permalink: getAccountQuizAnswerIndexes" href="#getaccountquizanswerindexes"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>
+<strong>ipfsHash1</strong>: ipfs hash reference of the content</li>
+<li>
+<strong>ipfsHash2</strong>: ipfs hash reference of the content check quiz</li>
+<li>
+<strong>_date</strong>: date of the block</li>
+<li>
+<strong>_numOfTotalQuestions</strong>:  number of the total questions assigned to the content check</li>
+<li>
+<strong>_numOfQuiestionsToAsk</strong>: number of questions to ask from the account</li>
+<li>
+<strong>_account</strong>: account address</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> getAccountQuizAnswerIndexes</span></span>(
+    <span class="pl-c1">string</span> <span class="pl-k">memory</span> <span class="pl-v">ipfsHash1</span>,
+    <span class="pl-c1">string</span> <span class="pl-k">memory</span> <span class="pl-v">ipfsHash2</span>,
+    <span class="pl-c1">uint</span> <span class="pl-v">_date</span>,
+    <span class="pl-c1">uint</span> <span class="pl-v">_numOfTotalQuestions</span>,
+    <span class="pl-c1">uint</span> <span class="pl-v">_numOfQuiestionsToAsk</span>,
+    <span class="pl-c1">address</span> <span class="pl-v">_account</span>
+) <span class="pl-k">internal</span> <span class="pl-k">pure</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint</span>[] <span class="pl-k">memory</span>) {
+    <span class="pl-c1">bytes32</span> hashCode <span class="pl-k">=</span> <span class="pl-c1">keccak256</span>(
+        <span class="pl-c1">abi.encodePacked</span>(ipfsHash1, ipfsHash2, _account)
+    );
+
+    <span class="pl-c1">uint</span> numOfVotingQuizQuestions <span class="pl-k">=</span> <span class="pl-c1">uint</span>(_numOfTotalQuestions);
+
+    <span class="pl-c1">uint</span>[] <span class="pl-k">memory </span>questionsToAsk <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">uint</span>[](_numOfQuiestionsToAsk);
+
+    <span class="pl-c1">uint</span> countAddedQuestions <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+    <span class="pl-k">for</span> (
+        <span class="pl-c1">uint</span> i <span class="pl-k">=</span> <span class="pl-c1">uint</span>(_date <span class="pl-k">%</span> numOfVotingQuizQuestions);
+        countAddedQuestions <span class="pl-k">&lt;</span> _numOfQuiestionsToAsk;
+        i<span class="pl-k">++</span>
+    ) {
+        <span class="pl-c1">uint</span> questionNth <span class="pl-k">=</span> (<span class="pl-c1">uint8</span>(hashCode[i]) <span class="pl-k">%</span> numOfVotingQuizQuestions) <span class="pl-k">+</span>
+            <span class="pl-c1">1</span>;
+
+        <span class="pl-c1">uint</span> u <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+        <span class="pl-k">do</span> {
+            <span class="pl-k">if</span> (questionsToAsk[u] <span class="pl-k">==</span> questionNth) {
+                questionNth<span class="pl-k">++</span>;
+                u <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+                <span class="pl-k">if</span> (questionNth <span class="pl-k">&gt;</span> numOfVotingQuizQuestions) {
+                    questionNth <span class="pl-k">=</span> <span class="pl-c1">1</span>;
+                }
+            } <span class="pl-k">else</span> {
+                u<span class="pl-k">++</span>;
+            }
+        } <span class="pl-k">while</span> (u <span class="pl-k">&lt;</span> countAddedQuestions);
+
+        questionsToAsk[countAddedQuestions] <span class="pl-k">=</span> questionNth;
+        countAddedQuestions<span class="pl-k">++</span>;
+    }
+
+    <span class="pl-k">return</span> questionsToAsk;
+}</pre></div>
+<p>Get the unique combination indexes of article or article response related content check.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="getAccountVotingQuizAnswerIndexes">getAccountVotingQuizAnswerIndexes</div></h3><a id="getaccountvotingquizanswerindexes" class="anchor" aria-label="Permalink: getAccountVotingQuizAnswerIndexes" href="#getaccountvotingquizanswerindexes"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>
+<strong>_votingKey</strong>: identifies the voting</li>
+<li>
+<strong>_account</strong>: account address</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> getAccountVotingQuizAnswerIndexes</span></span>(
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>,
+    <span class="pl-c1">address</span> <span class="pl-v">_account</span>
+) <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint</span>[] <span class="pl-k">memory</span>) {
+    <span class="pl-k">return</span>
+        <span class="pl-en">getAccountQuizAnswerIndexes</span>(
+            votings[_votingKey].votingContentCheckQuizIpfsHash,
+            votings[_votingKey].contentIpfsHash,
+            votings[_votingKey].startDate,
+            votingContentReadCheckAnswers[_votingKey].<span class="pl-mi">length</span>,
+            CONTENT_CHECK_ASKED_NUM_OF_QUESTIONS,
+            _account
+        );
+}</pre></div>
+<p>Returns the content check quiz indexes related to voting content.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="getContentReadCheckAnswersLength">getContentReadCheckAnswersLength</div></h3><a id="getcontentreadcheckanswerslength" class="anchor" aria-label="Permalink: getContentReadCheckAnswersLength" href="#getcontentreadcheckanswerslength"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>
+<strong>key</strong>: content identify key</li>
+<li>
+<strong>contentType</strong>: defines the content type (voting, article, response)</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> getContentReadCheckAnswersLength</span></span>(
+    <span class="pl-c1">bytes32</span> <span class="pl-v">key</span>,
+    <span class="pl-c1">uint</span> <span class="pl-v">contentType</span>
+) <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint</span>) {
+    <span class="pl-c">// voting</span>
+    <span class="pl-k">if</span> (contentType <span class="pl-k">==</span> <span class="pl-c1">1</span>) {
+        <span class="pl-k">return</span> votingContentReadCheckAnswers[key].<span class="pl-mi">length</span>;
+    } <span class="pl-k">else</span> <span class="pl-k">if</span> (contentType <span class="pl-k">==</span> <span class="pl-c1">2</span>) {
+        <span class="pl-k">return</span> articleContentReadCheckAnswers[key].<span class="pl-mi">length</span>;
+    } <span class="pl-k">else</span> {
+        <span class="pl-k">return</span> articleContentResponseReadCheckAnswers[key].<span class="pl-mi">length</span>;
+    }
+}</pre></div>
+<p>Returns any kind of content related answer indexes.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="getArticleKeysLength">getArticleKeysLength</div></h3><a id="getarticlekeyslength" class="anchor" aria-label="Permalink: getArticleKeysLength" href="#getarticlekeyslength"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> getArticleKeysLength</span></span>() <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint</span>) {
+    <span class="pl-k">return</span> articleKeys.<span class="pl-mi">length</span>;
+}</pre></div>
+<p>Returns the number of articles (article keys).</p>
+<div class="markdown-heading"><h2 class="heading-element">Functions &gt; General</h2><a id="functions--general" class="anchor" aria-label="Permalink: Functions &gt; General" href="#functions--general"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element"><div id="getContactKeysSize">getContactKeysSize</div></h3><a id="getcontactkeyssize" class="anchor" aria-label="Permalink: getContactKeysSize" href="#getcontactkeyssize"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> getContactKeysSize</span></span>() <span class="pl-k">public</span> <span class="pl-k">view</span> <span class="pl-k">returns</span> (<span class="pl-c1">uint256</span>) {
+    <span class="pl-k">return</span> contactKeys.<span class="pl-mi">length</span>;
+}</pre></div>
+<p>Returns the number of contacts (contact keys) assigned to contract.</p>
+<div class="markdown-heading"><h2 class="heading-element">Functions &gt; helpers</h2><a id="functions--helpers" class="anchor" aria-label="Permalink: Functions &gt; helpers" href="#functions--helpers"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element"><div id="isEmptyString">isEmptyString</div></h3><a id="isemptystring" class="anchor" aria-label="Permalink: isEmptyString" href="#isemptystring"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>input props:</p>
+<ul>
+<li>_string: any string</li>
+</ul>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">function<span class="pl-en"> isEmptyString</span></span>(<span class="pl-c1">string</span> <span class="pl-k">memory</span> <span class="pl-v">_string</span>) <span class="pl-k">public</span> <span class="pl-k">pure</span> <span class="pl-k">returns</span> (<span class="pl-c1">bool</span>) {
+    <span class="pl-k">return</span> <span class="pl-c1">keccak256</span>(<span class="pl-c1">bytes</span>(_string)) <span class="pl-k">==</span> <span class="pl-c1">keccak256</span>(<span class="pl-c1">bytes</span>(<span class="pl-s">""</span>));
+}</pre></div>
+<p>Checks if string is empty.</p>
+<div class="markdown-heading"><h1 class="heading-element">Validators (modifiers)</h1><a id="validators-modifiers" class="anchor" aria-label="Permalink: Validators (modifiers)" href="#validators-modifiers"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h2 class="heading-element">Validators &gt; Roles</h2><a id="validators--roles" class="anchor" aria-label="Permalink: Validators &gt; Roles" href="#validators--roles"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element"><div id="onlyRole">onlyRole</div></h3><a id="onlyrole" class="anchor" aria-label="Permalink: onlyRole" href="#onlyrole"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> onlyRole</span></span>(<span class="pl-c1">bytes32</span> <span class="pl-v">role</span>) {
+    <span class="pl-en">_checkRole</span>(role, <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>);
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if account has the role.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="minCitizenshipApplicationFeeCovered">minCitizenshipApplicationFeeCovered</div></h3><a id="mincitizenshipapplicationfeecovered" class="anchor" aria-label="Permalink: minCitizenshipApplicationFeeCovered" href="#mincitizenshipapplicationfeecovered"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> minCitizenshipApplicationFeeCovered</span></span>() {
+    <span class="pl-k">if</span> (<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">&lt;</span> citizenRoleApplicationFee) {
+        <span class="pl-k">revert</span> <span class="pl-en">MinimumApplicationFeeNotCovered</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if transaction value (crypto) is more than the minimum citizenship application fee (<strong>citizenRoleApplicationFee</strong>)</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="appliedForCitizenRole">appliedForCitizenRole</div></h3><a id="appliedforcitizenrole" class="anchor" aria-label="Permalink: appliedForCitizenRole" href="#appliedforcitizenrole"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> appliedForCitizenRole</span></span>(
+    <span class="pl-c1">address</span> <span class="pl-v">_account</span>,
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_emailPublicKeyHash</span>,
+    <span class="pl-c1">bool</span> <span class="pl-v">_revokeCitizenRole</span>
+) {
+    <span class="pl-k">if</span> (
+        citizenshipApplications[_account] <span class="pl-k">!=</span> _emailPublicKeyHash <span class="pl-k">&amp;&amp;</span>
+        <span class="pl-k">!</span>_revokeCitizenRole
+    ) {
+        <span class="pl-k">revert</span> <span class="pl-en">NotAppliedForCitizenRole</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if account not yet applied for citizenship.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="hasRoleToModify">hasRoleToModify</div></h3><a id="hasroletomodify" class="anchor" aria-label="Permalink: hasRoleToModify" href="#hasroletomodify"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> hasRoleToModify</span></span>(<span class="pl-c1">address</span> <span class="pl-v">_account</span>, <span class="pl-c1">bool</span> <span class="pl-v">isRevoke</span>) {
+    <span class="pl-k">if</span> (<span class="pl-k">!</span>isRevoke <span class="pl-k">&amp;&amp;</span> <span class="pl-en">hasRole</span>(CITIZEN, _account))
+        <span class="pl-k">revert</span> <span class="pl-en">CitizenRoleAlreadyGranted</span>();
+    <span class="pl-k">if</span> (isRevoke <span class="pl-k">&amp;&amp;</span> <span class="pl-k">!</span><span class="pl-en">hasRole</span>(CITIZEN, _account))
+        <span class="pl-k">revert</span> <span class="pl-en">CitizenRoleAlreadyRevokedOrNotGranted</span>();
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks account has <strong>CITIZEN</strong> role in revoke case and account has not <strong>CITIZEN</strong> role in grant case.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="hasCitizenRoleGrantCredit">hasCitizenRoleGrantCredit</div></h3><a id="hascitizenrolegrantcredit" class="anchor" aria-label="Permalink: hasCitizenRoleGrantCredit" href="#hascitizenrolegrantcredit"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> hasCitizenRoleGrantCredit</span></span>() {
+    <span class="pl-c1">uint</span> daysPassed <span class="pl-k">=</span> (<span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">-</span> creationDate) <span class="pl-k">/</span> <span class="pl-c1">60</span> <span class="pl-k">/</span> <span class="pl-c1">60</span> <span class="pl-k">/</span> <span class="pl-c1">24</span>;
+
+    <span class="pl-c1">uint</span> maxCitizensCanBeAddPerAdmin <span class="pl-k">=</span> (citizens.<span class="pl-mi">length</span> <span class="pl-k">/</span>
+        MAX_DAILY_NEW_CITIZENS_CAN_ADD_PERCENTAGE) <span class="pl-k">/</span> admins.<span class="pl-mi">length</span>;
+    maxCitizensCanBeAddPerAdmin <span class="pl-k">=</span> maxCitizensCanBeAddPerAdmin <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>
+        <span class="pl-k">?</span> maxCitizensCanBeAddPerAdmin
+       <span class="pl-k"> : </span><span class="pl-c1">1</span>;
+
+    <span class="pl-k">if</span> (
+        dailyCitizenRoleModifyCredit[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>][daysPassed] <span class="pl-k">&gt;=</span>
+        maxCitizensCanBeAddPerAdmin
+    ) <span class="pl-k">revert</span> <span class="pl-en">RunOutOfDailyCitizenRoleGrantCredit</span>();
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if <strong>ADMINISTRATOR</strong> can still grant/revoke <strong>CITIZEN</strong> role by having more role modify credits left for the day.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="adminRoleGrantApprovalNotSent">adminRoleGrantApprovalNotSent</div></h3><a id="adminrolegrantapprovalnotsent" class="anchor" aria-label="Permalink: adminRoleGrantApprovalNotSent" href="#adminrolegrantapprovalnotsent"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> adminRoleGrantApprovalNotSent</span></span>(<span class="pl-c1">address</span> <span class="pl-v">_account</span>) {
+    <span class="pl-c1">bool</span> adminRoleGrantApprovalAlreadySent <span class="pl-k">=</span> <span class="pl-c1">false</span>;
+    <span class="pl-k">for</span> (
+        <span class="pl-c1">uint</span> i <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+        i <span class="pl-k">&lt;</span> adminApprovalSentToAccount[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>].<span class="pl-mi">length</span>;
+        i<span class="pl-k">++</span>
+    ) {
+        <span class="pl-k">if</span> (adminApprovalSentToAccount[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>][i] <span class="pl-k">==</span> _account) {
+            adminRoleGrantApprovalAlreadySent <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+        }
+    }
+
+    <span class="pl-k">if</span> (adminRoleGrantApprovalAlreadySent)
+        <span class="pl-k">revert</span> <span class="pl-en">AdminRoleGrantApprovalAlreadySent</span>();
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if admin role grant already applied on account.</p>
+<div class="markdown-heading"><h2 class="heading-element">Validators &gt; Elections</h2><a id="validators--elections" class="anchor" aria-label="Permalink: Validators &gt; Elections" href="#validators--elections"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element"><div id="noUnclosedElections">noUnclosedElections</div></h3><a id="nounclosedelections" class="anchor" aria-label="Permalink: noUnclosedElections" href="#nounclosedelections"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> noUnclosedElections</span></span>() {
+    <span class="pl-k">if</span> (electionsStartDate <span class="pl-k">!=</span> <span class="pl-c1">0</span>) {
+        <span class="pl-k">revert</span> <span class="pl-en">ThereIsAnOngoingElections</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Check if the actual elections closed.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="validApplication">validApplication</div></h3><a id="validapplication" class="anchor" aria-label="Permalink: validApplication" href="#validapplication"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> validApplication</span></span>() {
+    <span class="pl-k">if</span> (electionsStartDate <span class="pl-k">==</span> <span class="pl-c1">0</span> <span class="pl-k">||</span> electionsStartDate <span class="pl-k">&lt;</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span>) {
+        <span class="pl-k">revert</span> <span class="pl-en">ElectionsNotScheduledOrAlreadyStarted</span>();
+    } <span class="pl-k">else</span> <span class="pl-k">if</span> (electionCandidateScores[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>) {
+        <span class="pl-k">revert</span> <span class="pl-en">AccountAlreadyAppliedForElections</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if there is an scheduled elections and new candidate applicant not applied yet</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="newElectionsStartDateIs30DaysAhead">newElectionsStartDateIs30DaysAhead</div></h3><a id="newelectionsstartdateis30daysahead" class="anchor" aria-label="Permalink: newElectionsStartDateIs30DaysAhead" href="#newelectionsstartdateis30daysahead"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> newElectionsStartDateIs30DaysAhead</span></span>(<span class="pl-c1">uint</span> <span class="pl-v">_electionsStartDate</span>) {
+    <span class="pl-k">if</span> (
+        _electionsStartDate <span class="pl-k">&lt;</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">+</span> ELECTION_START_END_INTERVAL
+    ) {
+        <span class="pl-k">revert</span> <span class="pl-en">ElectionStartDateHasToBe30DaysAhead</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if the next scheduled elections is 30 days (<strong>ELECTION_START_END_INTERVAL</strong>) ahead from now.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="validVote">validVote</div></h3><a id="validvote" class="anchor" aria-label="Permalink: validVote" href="#validvote"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> validVote</span></span>(<span class="pl-c1">address</span> <span class="pl-v">_voteOnAddress</span>) {
+    <span class="pl-k">if</span> (<span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">&lt;</span> electionsStartDate <span class="pl-k">||</span> electionsStartDate <span class="pl-k">==</span> <span class="pl-c1">0</span>) {
+        <span class="pl-k">revert</span> <span class="pl-en">ThereIsNoOngoingElections</span>();
+    } <span class="pl-k">else</span> <span class="pl-k">if</span> (<span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">&gt;</span> electionsEndDate) {
+        <span class="pl-k">revert</span> <span class="pl-en">ElectionsAlreadyFinished</span>();
+    } <span class="pl-k">else</span> <span class="pl-k">if</span> (<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span> <span class="pl-k">==</span> _voteOnAddress) {
+        <span class="pl-k">revert</span> <span class="pl-en">AccountCantVoteOnItself</span>();
+    } <span class="pl-k">else</span> <span class="pl-k">if</span> (electionCandidateScores[_voteOnAddress] <span class="pl-k">==</span> <span class="pl-c1">0</span>) {
+        <span class="pl-k">revert</span> <span class="pl-en">VoteOnAccountNotBelongToAnyCandidate</span>();
+    } <span class="pl-k">else</span> <span class="pl-k">if</span> (electionVotes[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>] <span class="pl-k">!=</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>)) {
+        <span class="pl-k">revert</span> <span class="pl-en">AccountAlreadyVoted</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if the vote on a candidate from a <strong>CITIZEN</strong> is valid. Elections started and not yet finished. The vote is not goes on him/herself. If the targeted candidate exists. If account not voted already.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="canCloseElections">canCloseElections</div></h3><a id="cancloseelections" class="anchor" aria-label="Permalink: canCloseElections" href="#cancloseelections"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> canCloseElections</span></span>() {
+    <span class="pl-k">if</span> (electionsStartDate <span class="pl-k">==</span> <span class="pl-c1">0</span>) {
+        <span class="pl-k">revert</span> <span class="pl-en">ElectionsAlreadyClosedOrNotYetScheduled</span>();
+    } <span class="pl-k">else</span> <span class="pl-k">if</span> (electionsEndDate <span class="pl-k">&gt;</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span>) {
+        <span class="pl-k">revert</span> <span class="pl-en">ElectionsCanOnlyCloseAfterItsEndDate</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if elections can be closed by check if not yet closed and end date is passed.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="minCandidateApplicationFeeCovered">minCandidateApplicationFeeCovered</div></h3><a id="mincandidateapplicationfeecovered" class="anchor" aria-label="Permalink: minCandidateApplicationFeeCovered" href="#mincandidateapplicationfeecovered"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> minCandidateApplicationFeeCovered</span></span>() {
+    <span class="pl-k">if</span> (<span class="pl-c1">msg</span>.<span class="pl-c1">value</span> <span class="pl-k">&lt;</span> electionsCandidateApplicationFee) {
+        <span class="pl-k">revert</span> <span class="pl-en">MinimumApplicationFeeNotCovered</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if sent value (crypto) is more than the minimum candidate application fee (<strong>electionsCandidateApplicationFee</strong>).</p>
+<div class="markdown-heading"><h2 class="heading-element">Validators &gt; Voting</h2><a id="validators--voting" class="anchor" aria-label="Permalink: Validators &gt; Voting" href="#validators--voting"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element"><div id="approveAttempt3DaysBeforeVotingStarts">approveAttempt3DaysBeforeVotingStarts</div></h3><a id="approveattempt3daysbeforevotingstarts" class="anchor" aria-label="Permalink: approveAttempt3DaysBeforeVotingStarts" href="#approveattempt3daysbeforevotingstarts"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> approveAttempt3DaysBeforeVotingStarts</span></span>(<span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>) {
+    <span class="pl-k">if</span> (
+        votings[_votingKey].startDate <span class="pl-k">-</span>
+            APPROVE_VOTING_BEFORE_IT_STARTS_LIMIT <span class="pl-k">&gt;</span>
+        <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span>
+    ) {
+        <span class="pl-k">revert</span> <span class="pl-en">VotingCanBeApproved3DaysOrLessBeforeItsStart</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if voting approve is in the 3 DAYS before the voting start range.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="contentCheckQuizCompleted">contentCheckQuizCompleted</div></h3><a id="contentcheckquizcompleted" class="anchor" aria-label="Permalink: contentCheckQuizCompleted" href="#contentcheckquizcompleted"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> contentCheckQuizCompleted</span></span>(<span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>) {
+    <span class="pl-k">if</span> (<span class="pl-k">!</span>votes[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>][_votingKey].isContentCompleted) {
+        <span class="pl-k">revert</span> <span class="pl-en">VotingContentCheckQuizNotCompleted</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if voting content assigned quiz is completed</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="criticisedArticleRelatedToYourVoting">criticisedArticleRelatedToYourVoting</div></h3><a id="criticisedarticlerelatedtoyourvoting" class="anchor" aria-label="Permalink: criticisedArticleRelatedToYourVoting" href="#criticisedarticlerelatedtoyourvoting"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre> <span class="pl-k">modifier<span class="pl-en"> criticisedArticleRelatedToYourVoting</span></span>(
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>,
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_proConArticleKey</span>
+) {
+    <span class="pl-k">if</span> (
+        votings[proConArticles[_votingKey][_proConArticleKey].votingKey]
+            .creator <span class="pl-k">!=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>
+    ) <span class="pl-k">revert</span> <span class="pl-en">ArticleNotRelatedToYourVoting</span>();
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if the creator related to the article is equal with the account who interacted with the contract</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="creatorOfVotingRespondedOnArticles">creatorOfVotingRespondedOnArticles</div></h3><a id="creatorofvotingrespondedonarticles" class="anchor" aria-label="Permalink: creatorOfVotingRespondedOnArticles" href="#creatorofvotingrespondedonarticles"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> creatorOfVotingRespondedOnArticles</span></span>(<span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>) {
+    <span class="pl-c1">bool</span> isRespondedAllTheCritics <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+    <span class="pl-c1">uint</span> articleKeysLength <span class="pl-k">=</span> articleKeys.<span class="pl-mi">length</span>;
+
+    <span class="pl-k">for</span> (<span class="pl-c1">uint</span> i <span class="pl-k">=</span> <span class="pl-c1">0</span>; i <span class="pl-k">&lt;</span> articleKeysLength; i<span class="pl-k">++</span>) {
+        <span class="pl-k">if</span> (proConArticles[_votingKey][articleKeys[i]].isArticleApproved) {
+            <span class="pl-k">if</span> (
+                <span class="pl-k">!</span>proConArticles[_votingKey][articleKeys[i]]
+                    .isResponseApproved
+            ) {
+                isRespondedAllTheCritics <span class="pl-k">=</span> <span class="pl-c1">false</span>;
+                <span class="pl-k">break</span>;
+            }
+        }
+    }
+    <span class="pl-k">if</span> (<span class="pl-k">!</span>isRespondedAllTheCritics) {
+        <span class="pl-k">revert</span> <span class="pl-en">VotingOwnerNotRespondedOnAllArticles</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if the <strong>POLITICAL_ACTOR</strong> who scheduled the voting also responded on all the pro/con articles assigned to the voting.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="enoughVotesArrived">enoughVotesArrived</div></h3><a id="enoughvotesarrived" class="anchor" aria-label="Permalink: enoughVotesArrived" href="#enoughvotesarrived"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> enoughVotesArrived</span></span>(<span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>) {
+    <span class="pl-k">if</span> (
+        (votings[_votingKey].voteCount <span class="pl-k">*</span> <span class="pl-c1">100</span>) <span class="pl-k">/</span>
+            votings[_votingKey].actualNumberOfCitizens <span class="pl-k">&lt;</span>
+        MIN_PERCENTAGE_OF_VOTES
+    ) {
+        <span class="pl-k">revert</span> <span class="pl-en">NoEnoughVotesReceived</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if the number of votes arrived on the voting is bigger than the minimum (<strong>MIN_PERCENTAGE_OF_VOTES</strong>).</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="firstVotingCycleStartDateIsInTheFuture">firstVotingCycleStartDateIsInTheFuture</div></h3><a id="firstvotingcyclestartdateisinthefuture" class="anchor" aria-label="Permalink: firstVotingCycleStartDateIsInTheFuture" href="#firstvotingcyclestartdateisinthefuture"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> firstVotingCycleStartDateIsInTheFuture</span></span>(
+    <span class="pl-c1">uint</span> <span class="pl-v">_firstVotingCycleStartDate</span>
+) {
+    <span class="pl-k">if</span> (_firstVotingCycleStartDate <span class="pl-k">&lt;</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span>) {
+        <span class="pl-k">revert</span> <span class="pl-en">FirstVotingCycleStartDateHasToBeInTheFuture</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if a new first voting cycle start date is in the future.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="newVotingScheduledAtLeast10daysAhead">newVotingScheduledAtLeast10daysAhead</div></h3><a id="newvotingscheduledatleast10daysahead" class="anchor" aria-label="Permalink: newVotingScheduledAtLeast10daysAhead" href="#newvotingscheduledatleast10daysahead"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> newVotingScheduledAtLeast10daysAhead</span></span>(<span class="pl-c1">uint</span> <span class="pl-v">_startDate</span>) {
+    <span class="pl-k">if</span> (
+        _startDate <span class="pl-k">&lt;</span>
+        <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">+</span> NEW_VOTING_PERIOD_MIN_SCHEDULE_AHEAD_TIME
+    ) {
+        <span class="pl-k">revert</span> <span class="pl-en">NewVotingHasToBeScheduled10DaysAhead</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if a new scheduled voting is 10 days (<strong>NEW_VOTING_PERIOD_MIN_SCHEDULE_AHEAD_TIME</strong>) ahead.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="notVotedYetOnThisVoting">notVotedYetOnThisVoting</div></h3><a id="notvotedyetonthisvoting" class="anchor" aria-label="Permalink: notVotedYetOnThisVoting" href="#notvotedyetonthisvoting"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> notVotedYetOnThisVoting</span></span>(<span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>) {
+    <span class="pl-k">if</span> (votes[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>][_votingKey].voted) {
+        <span class="pl-k">revert</span> <span class="pl-en">AlreadyVotedOnThisVoting</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if <strong>CITIZEN</strong> voted already on the particular voting.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="newVotingScheduledMaximum30daysAhead">newVotingScheduledMaximum30daysAhead</div></h3><a id="newvotingscheduledmaximum30daysahead" class="anchor" aria-label="Permalink: newVotingScheduledMaximum30daysAhead" href="#newvotingscheduledmaximum30daysahead"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> newVotingScheduledMaximum30daysAhead</span></span>(<span class="pl-c1">uint</span> <span class="pl-v">_startDate</span>) {
+    <span class="pl-k">if</span> (_startDate <span class="pl-k">&gt;</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">+</span> VOTING_CYCLE_INTERVAL) {
+        <span class="pl-k">revert</span> <span class="pl-en">NewVotingHasToBeScheduledLessThan30daysAhead</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if new voting schedule end date is maximum 30 days (<strong>VOTING_CYCLE_INTERVAL</strong>) ahead.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="votingApproved">votingApproved</div></h3><a id="votingapproved" class="anchor" aria-label="Permalink: votingApproved" href="#votingapproved"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> votingApproved</span></span>(<span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>) {
+    <span class="pl-k">if</span> (<span class="pl-k">!</span>votings[_votingKey].approved) {
+        <span class="pl-k">revert</span> <span class="pl-en">VotingNotApproved</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if a voting is approved.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="votingBelongsToSender">votingBelongsToSender</div></h3><a id="votingbelongstosender" class="anchor" aria-label="Permalink: votingBelongsToSender" href="#votingbelongstosender"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> votingBelongsToSender</span></span>(<span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>) {
+    <span class="pl-k">if</span> (<span class="pl-en">getVoting</span>(_votingKey).creator <span class="pl-k">!=</span> <span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>) {
+        <span class="pl-k">revert</span> <span class="pl-en">VotingNotBelongsToSender</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if the voting belongs to the <strong>CITIZEN</strong> who also executed this function call.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="votingContentQuizIpfsAssigned">votingContentQuizIpfsAssigned</div></h3><a id="votingcontentquizipfsassigned" class="anchor" aria-label="Permalink: votingContentQuizIpfsAssigned" href="#votingcontentquizipfsassigned"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> votingContentQuizIpfsAssigned</span></span>(<span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>) {
+    <span class="pl-k">if</span> (<span class="pl-en">isEmptyString</span>(votings[_votingKey].votingContentCheckQuizIpfsHash)) {
+        <span class="pl-k">revert</span> <span class="pl-en">VotingContentCheckQuizNotAssigned</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if related to the voting content there is an assigned ipfs hash reference what points to the voting content check quiz (assigned by <strong>ADMINISTRATORS</strong>)</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="votingExists">votingExists</div></h3><a id="votingexists" class="anchor" aria-label="Permalink: votingExists" href="#votingexists"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> votingExists</span></span>(<span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>) {
+    <span class="pl-k">if</span> (votings[_votingKey].creator <span class="pl-k">==</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>)) {
+        <span class="pl-k">revert</span> <span class="pl-en">VotingNotExists</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if the voting is existing by looking at the creator address value.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="votingIsOngoing">votingIsOngoing</div></h3><a id="votingisongoing" class="anchor" aria-label="Permalink: votingIsOngoing" href="#votingisongoing"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> votingIsOngoing</span></span>(<span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>) {
+    <span class="pl-k">if</span> (
+        votings[_votingKey].startDate <span class="pl-k">&gt;</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">||</span>
+        votings[_votingKey].startDate <span class="pl-k">+</span> VOTING_DURATION <span class="pl-k">&lt;</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span>
+    ) {
+        <span class="pl-k">revert</span> <span class="pl-en">VotingNotYetStartedOrAlreadyFinished</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if voting is already started and also not yet finished.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="votingNotFinished">votingNotFinished</div></h3><a id="votingnotfinished" class="anchor" aria-label="Permalink: votingNotFinished" href="#votingnotfinished"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> votingNotFinished</span></span>(<span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>) {
+    <span class="pl-k">if</span> (votings[_votingKey].startDate <span class="pl-k">+</span> VOTING_DURATION <span class="pl-k">&gt;</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span>) {
+        <span class="pl-k">revert</span> <span class="pl-en">VotingNotFinished</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks it voting not finished yet.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="votingNotYetStarted">votingNotYetStarted</div></h3><a id="votingnotyetstarted" class="anchor" aria-label="Permalink: votingNotYetStarted" href="#votingnotyetstarted"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> votingNotYetStarted</span></span>(<span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>) {
+    <span class="pl-k">if</span> (votings[_votingKey].startDate <span class="pl-k">&lt;</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span>) {
+        <span class="pl-k">revert</span> <span class="pl-en">VotingAlreadyStarted</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if voting not yet started.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="votingPeriodIsActive">votingPeriodIsActive</div></h3><a id="votingperiodisactive" class="anchor" aria-label="Permalink: votingPeriodIsActive" href="#votingperiodisactive"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> votingPeriodIsActive</span></span>() {
+    <span class="pl-k">if</span> (
+        firstVotingCycleStartDate <span class="pl-k">&gt;</span> <span class="pl-c1">block</span>.<span class="pl-c1">timestamp</span> <span class="pl-k">||</span>
+        firstVotingCycleStartDate <span class="pl-k">==</span> <span class="pl-c1">0</span>
+    ) {
+        <span class="pl-k">revert</span> <span class="pl-en">NoOngoingVotingPeriod</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if the voting period is declared and also ongoing.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="votingWon">votingWon</div></h3><a id="votingwon" class="anchor" aria-label="Permalink: votingWon" href="#votingwon"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> votingWon</span></span>(<span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>) {
+    <span class="pl-k">if</span> (<span class="pl-k">!</span><span class="pl-en">isVotingWon</span>(_votingKey)) {
+        <span class="pl-k">revert</span> <span class="pl-en">VotingDidNotWon</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if voting won by looking at the expected outcome related total voting score.</p>
+<div class="markdown-heading"><h2 class="heading-element">Validators &gt; Content</h2><a id="validators--content" class="anchor" aria-label="Permalink: Validators &gt; Content" href="#validators--content"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element"><div id="articleShouldExists">articleShouldExists</div></h3><a id="articleshouldexists" class="anchor" aria-label="Permalink: articleShouldExists" href="#articleshouldexists"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> articleShouldExists</span></span>(<span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>, <span class="pl-c1">bytes32</span> <span class="pl-v">_articleKey</span>) {
+    <span class="pl-k">if</span> (proConArticles[_votingKey][_articleKey].publisher <span class="pl-k">==</span> <span class="pl-c1">address</span>(<span class="pl-c1">0</span>)) {
+        <span class="pl-k">revert</span> <span class="pl-en">ArticleNotExists</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if article is exists by looking at the publisher value.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="enoughContentReadQuizAnswerAdded">enoughContentReadQuizAnswerAdded</div></h3><a id="enoughcontentreadquizansweradded" class="anchor" aria-label="Permalink: enoughContentReadQuizAnswerAdded" href="#enoughcontentreadquizansweradded"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> enoughContentReadQuizAnswerAdded</span></span>(
+    <span class="pl-c1">bytes32</span>[] <span class="pl-k">memory</span> <span class="pl-v">_keccak256HashedAnswers</span>
+) {
+    <span class="pl-k">if</span> (
+        _keccak256HashedAnswers.<span class="pl-mi">length</span> <span class="pl-k">&lt;</span> MIN_TOTAL_CONTENT_READ_CHECK_ANSWER
+    ) {
+        <span class="pl-k">revert</span> <span class="pl-en">NoEnoughContentReadQuizAnswerAdded</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if the minimum required (<a href="#MIN_TOTAL_CONTENT_READ_CHECK_ANSWER">MIN_TOTAL_CONTENT_READ_CHECK_ANSWER</a>) content check quiz answers provided related to the passed answers array.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="hasArticleContentIpfsHashAssigned">hasArticleContentIpfsHashAssigned</div></h3><a id="hasarticlecontentipfshashassigned" class="anchor" aria-label="Permalink: hasArticleContentIpfsHashAssigned" href="#hasarticlecontentipfshashassigned"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> hasArticleContentIpfsHashAssigned</span></span>(
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>,
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_articleKey</span>
+) {
+    <span class="pl-k">if</span> (
+        <span class="pl-en">isEmptyString</span>(
+            proConArticles[_votingKey][_articleKey]
+                .articleContentCheckQuizIpfsHash
+        )
+    ) {
+        <span class="pl-k">revert</span> <span class="pl-en">NoArticleContentCheckIpfsAssignedToThisArticle</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if the content check quiz document hash is assigned to the actual article.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="hasArticleResponseAssigned">hasArticleResponseAssigned</div></h3><a id="hasarticleresponseassigned" class="anchor" aria-label="Permalink: hasArticleResponseAssigned" href="#hasarticleresponseassigned"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> hasArticleResponseAssigned</span></span>(
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>,
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_articleKey</span>
+) {
+    <span class="pl-k">if</span> (
+        <span class="pl-en">isEmptyString</span>(
+            proConArticles[_votingKey][_articleKey]
+                .responseStatementIpfsHash
+        )
+    ) {
+        <span class="pl-k">revert</span> <span class="pl-en">NoArticleResponseAssigned</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if any response statement ipfs hash assigned to the article.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="hasArticleResponseContentCheckIpfsHash">hasArticleResponseContentCheckIpfsHash</div></h3><a id="hasarticleresponsecontentcheckipfshash" class="anchor" aria-label="Permalink: hasArticleResponseContentCheckIpfsHash" href="#hasarticleresponsecontentcheckipfshash"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> hasArticleResponseContentCheckIpfsHash</span></span>(
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>,
+    <span class="pl-c1">bytes32</span> <span class="pl-v">_articleKey</span>
+) {
+    <span class="pl-k">if</span> (
+        <span class="pl-en">isEmptyString</span>(
+            proConArticles[_votingKey][_articleKey]
+                .responseContentCheckQuizIpfsHash
+        )
+    ) {
+        <span class="pl-k">revert</span> <span class="pl-en">NoArticleResponseContentCheckIpfsAssigned</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if article related response has an assigned validation quiz document ipfs hash reference.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="hasCreditsLeftToPublishArticle">hasCreditsLeftToPublishArticle</div></h3><a id="hascreditslefttopublisharticle" class="anchor" aria-label="Permalink: hasCreditsLeftToPublishArticle" href="#hascreditslefttopublisharticle"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-k">modifier<span class="pl-en"> hasCreditsLeftToPublishArticle</span></span>(<span class="pl-c1">bytes32</span> <span class="pl-v">_votingKey</span>) {
+    <span class="pl-k">if</span> (
+        publishArticleToVotingsCount[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>][_votingKey] <span class="pl-k">&gt;=</span>
+        politicalActorVotingCredits[<span class="pl-c1">msg</span>.<span class="pl-c1">sender</span>]
+    ) {
+        <span class="pl-k">revert</span> <span class="pl-en">NoMorePublishArticleCreditsRelatedToThisVoting</span>();
+    }
+    <span class="pl-k">_;</span>
+}</pre></div>
+<p>Checks if <strong>POLITICAL_ACTOR</strong> has any credit left related to the voting to assign at least one more article to it.</p>
+<div class="markdown-heading"><h1 class="heading-element">Global variables</h1><a id="global-variables" class="anchor" aria-label="Permalink: Global variables" href="#global-variables"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h2 class="heading-element">Global variables &gt; Roles</h2><a id="global-variables--roles" class="anchor" aria-label="Permalink: Global variables &gt; Roles" href="#global-variables--roles"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element"><div id="ADMINISTRATOR">ADMINISTRATOR</div></h3><a id="administrator" class="anchor" aria-label="Permalink: ADMINISTRATOR" href="#administrator"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-c1">bytes32</span> <span class="pl-k">public constant </span>ADMINISTRATOR <span class="pl-k">=</span> <span class="pl-c1">keccak256</span>(<span class="pl-s">"<span class="pl-s">ADMINISTRATOR</span>"</span>);</pre></div>
+<div class="markdown-heading"><h3 class="heading-element"><div id="POLITICAL_ACTOR">POLITICAL_ACTOR</div></h3><a id="political_actor" class="anchor" aria-label="Permalink: POLITICAL_ACTOR" href="#political_actor"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-c1">bytes32</span> <span class="pl-k">public constant </span>POLITICAL_ACTOR <span class="pl-k">=</span> <span class="pl-c1">keccak256</span>(<span class="pl-s">"<span class="pl-s">POLITICAL_ACTOR</span>"</span>);</pre></div>
+<div class="markdown-heading"><h3 class="heading-element"><div id="CITIZEN">CITIZEN</div></h3><a id="citizen" class="anchor" aria-label="Permalink: CITIZEN" href="#citizen"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-c1">bytes32</span> <span class="pl-k">public constant </span>CITIZEN <span class="pl-k">=</span> <span class="pl-c1">keccak256</span>(<span class="pl-s">"<span class="pl-s">CITIZEN</span>"</span>);</pre></div>
+<div class="markdown-heading"><h2 class="heading-element">Global variables &gt; Constants</h2><a id="global-variables--constants" class="anchor" aria-label="Permalink: Global variables &gt; Constants" href="#global-variables--constants"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element"><div id="APPROVE_VOTING_BEFORE_IT_STARTS_LIMIT">APPROVE_VOTING_BEFORE_IT_STARTS_LIMIT</div></h3><a id="approve_voting_before_it_starts_limit" class="anchor" aria-label="Permalink: APPROVE_VOTING_BEFORE_IT_STARTS_LIMIT" href="#approve_voting_before_it_starts_limit"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-c1">uint</span> <span class="pl-k">public constant </span>APPROVE_VOTING_BEFORE_IT_STARTS_LIMIT <span class="pl-k">=</span> <span class="pl-c1">3</span> <span class="pl-c1">days</span>;</pre></div>
+<p>Tells the amount of time when a scheduled voting can start to be approved by <strong>ADMINISTRATORS</strong></p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="CONTENT_CHECK_ASKED_NUM_OF_QUESTIONS">CONTENT_CHECK_ASKED_NUM_OF_QUESTIONS</div></h3><a id="content_check_asked_num_of_questions" class="anchor" aria-label="Permalink: CONTENT_CHECK_ASKED_NUM_OF_QUESTIONS" href="#content_check_asked_num_of_questions"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-c1">uint</span> <span class="pl-k">public constant </span>CONTENT_CHECK_ASKED_NUM_OF_QUESTIONS <span class="pl-k">=</span> <span class="pl-c1">5</span>;</pre></div>
+<p>The minimum number of content check question will be asked from the <strong>CITIZENS</strong> during any kind of content read validation process.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="ELECTION_START_END_INTERVAL">ELECTION_START_END_INTERVAL</div></h3><a id="election_start_end_interval" class="anchor" aria-label="Permalink: ELECTION_START_END_INTERVAL" href="#election_start_end_interval"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-c1">uint</span> <span class="pl-k">public constant </span>ELECTION_START_END_INTERVAL <span class="pl-k">=</span> <span class="pl-c1">30</span> <span class="pl-c1">days</span>;</pre></div>
+<p>The amount of time how long an election period will take.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="MAX_DAILY_NEW_CITIZENS_CAN_ADD_PERCENTAGE">MAX_DAILY_NEW_CITIZENS_CAN_ADD_PERCENTAGE</div></h3><a id="max_daily_new_citizens_can_add_percentage" class="anchor" aria-label="Permalink: MAX_DAILY_NEW_CITIZENS_CAN_ADD_PERCENTAGE" href="#max_daily_new_citizens_can_add_percentage"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-c1">uint</span> <span class="pl-k">public constant </span>MAX_DAILY_NEW_CITIZENS_CAN_ADD_PERCENTAGE <span class="pl-k">=</span> <span class="pl-c1">10</span>;</pre></div>
+<p>This limitation percentage of the number of daily granted <strong>CITIZEN</strong> roles compared to the actual size of the <strong>CITIZENS</strong> per <strong>ADMINISTRATOR</strong></p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="MIN_VOTE_SCORE">MIN_VOTE_SCORE</div></h3><a id="min_vote_score" class="anchor" aria-label="Permalink: MIN_VOTE_SCORE" href="#min_vote_score"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-c1">uint</span> <span class="pl-k">public constant </span>MIN_VOTE_SCORE <span class="pl-k">=</span> <span class="pl-c1">5</span>;</pre></div>
+<p>The granted minimum voting score every <strong>CITIZEN</strong> has (after content read validated the actual voting topics).</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="MINIMUM_PERCENTAGE_OF_ELECTION_VOTES">MINIMUM_PERCENTAGE_OF_ELECTION_VOTES</div></h3><a id="minimum_percentage_of_election_votes" class="anchor" aria-label="Permalink: MINIMUM_PERCENTAGE_OF_ELECTION_VOTES" href="#minimum_percentage_of_election_votes"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-c1">uint</span> <span class="pl-k">public constant </span>MINIMUM_PERCENTAGE_OF_ELECTION_VOTES <span class="pl-k">=</span> <span class="pl-c1">10</span>;</pre></div>
+<p>The minimum percentage of votes a candidate has to own at the end of the elections.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="MIN_PERCENTAGE_OF_VOTES">MIN_PERCENTAGE_OF_VOTES</div></h3><a id="min_percentage_of_votes" class="anchor" aria-label="Permalink: MIN_PERCENTAGE_OF_VOTES" href="#min_percentage_of_votes"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-c1">uint</span> <span class="pl-k">public constant </span>MIN_PERCENTAGE_OF_VOTES <span class="pl-k">=</span> <span class="pl-c1">10</span>;</pre></div>
+<div class="markdown-heading"><h3 class="heading-element"><div id="MIN_PERCENTAGE_GRANT_ADMIN_APPROVALS_REQUIRED">MIN_PERCENTAGE_GRANT_ADMIN_APPROVALS_REQUIRED</div></h3><a id="min_percentage_grant_admin_approvals_required" class="anchor" aria-label="Permalink: MIN_PERCENTAGE_GRANT_ADMIN_APPROVALS_REQUIRED" href="#min_percentage_grant_admin_approvals_required"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-c1">uint</span> <span class="pl-k">public constant </span>MIN_PERCENTAGE_GRANT_ADMIN_APPROVALS_REQUIRED <span class="pl-k">=</span> <span class="pl-c1">50</span>;</pre></div>
+<p>The minimum percentage of common will in crucial decision makings where multiple admin approvals required.</p>
+<p>The minimum percentage of number of votes required during a voting process compared to actual number of the <strong>CITIZENS</strong>.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="MIN_TOTAL_CONTENT_READ_CHECK_ANSWER">MIN_TOTAL_CONTENT_READ_CHECK_ANSWER</div></h3><a id="min_total_content_read_check_answer" class="anchor" aria-label="Permalink: MIN_TOTAL_CONTENT_READ_CHECK_ANSWER" href="#min_total_content_read_check_answer"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-c1">uint</span> <span class="pl-k">public constant </span>MIN_TOTAL_CONTENT_READ_CHECK_ANSWER <span class="pl-k">=</span> <span class="pl-c1">10</span>;</pre></div>
+<p>The minimum number of answers has to be assigned to every new content.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="NEW_VOTING_PERIOD_MIN_SCHEDULE_AHEAD_TIME">NEW_VOTING_PERIOD_MIN_SCHEDULE_AHEAD_TIME</div></h3><a id="new_voting_period_min_schedule_ahead_time" class="anchor" aria-label="Permalink: NEW_VOTING_PERIOD_MIN_SCHEDULE_AHEAD_TIME" href="#new_voting_period_min_schedule_ahead_time"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-c1">uint</span> <span class="pl-k">public constant </span>NEW_VOTING_PERIOD_MIN_SCHEDULE_AHEAD_TIME <span class="pl-k">=</span> <span class="pl-c1">10</span> <span class="pl-c1">days</span>;</pre></div>
+<p>The minimum amount of time a new voting has to be scheduled ahead.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="VOTING_CYCLE_INTERVAL">VOTING_CYCLE_INTERVAL</div></h3><a id="voting_cycle_interval" class="anchor" aria-label="Permalink: VOTING_CYCLE_INTERVAL" href="#voting_cycle_interval"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-c1">uint</span> <span class="pl-k">public constant </span>VOTING_CYCLE_INTERVAL <span class="pl-k">=</span> <span class="pl-c1">30</span> <span class="pl-c1">days</span>;</pre></div>
+<p>The amount of time how long a voting cycle takes.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="VOTING_DURATION">VOTING_DURATION</div></h3><a id="voting_duration" class="anchor" aria-label="Permalink: VOTING_DURATION" href="#voting_duration"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-c1">uint</span> <span class="pl-k">public constant </span>VOTING_DURATION <span class="pl-k">=</span> <span class="pl-c1">14</span> <span class="pl-c1">days</span>;</pre></div>
+<p>The amount of time a voting takes.</p>
+<div class="markdown-heading"><h2 class="heading-element">Global variables &gt; General</h2><a id="global-variables--general" class="anchor" aria-label="Permalink: Global variables &gt; General" href="#global-variables--general"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element"><div id="citizenRoleApplicationFee">citizenRoleApplicationFee</div></h3><a id="citizenroleapplicationfee" class="anchor" aria-label="Permalink: citizenRoleApplicationFee" href="#citizenroleapplicationfee"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-c1">uint</span> <span class="pl-k">public </span>citizenRoleApplicationFee <span class="pl-k">=</span> <span class="pl-c1">10000</span>;</pre></div>
+<p>The minimum amount of crypto a person has to pay when he/she applies for citizenship.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="electionsCandidateApplicationFee">electionsCandidateApplicationFee</div></h3><a id="electionscandidateapplicationfee" class="anchor" aria-label="Permalink: electionsCandidateApplicationFee" href="#electionscandidateapplicationfee"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-c1">uint</span> <span class="pl-k">public </span>electionsCandidateApplicationFee <span class="pl-k">=</span> <span class="pl-c1">1</span> <span class="pl-c1">ether</span> <span class="pl-k">/</span> <span class="pl-c1">10</span>;</pre></div>
+<p>The minimum amount of crypto a <strong>CITIZEN</strong> has to pay when he/she want to become a candidate on the upcoming elections.</p>
+<div class="markdown-heading"><h3 class="heading-element"><div id="firstVotingCycleStartDate">firstVotingCycleStartDate</div></h3><a id="firstvotingcyclestartdate" class="anchor" aria-label="Permalink: firstVotingCycleStartDate" href="#firstvotingcyclestartdate"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="highlight highlight-source-solidity"><pre><span class="pl-c1">uint</span> <span class="pl-k">public</span> firstVotingCycleStartDate;</pre></div>
+<p>Tells when after the elections the first voting cycle has to start.</p>
 
     </body>
 </html>

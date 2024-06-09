@@ -4,6 +4,8 @@
 **Solidity version:** 0.8.9<br>
 **Source code:** [Github link](https://github.com/Martines90/bvs-v0)
 
+<span class=™nav-menu™>
+
 ### 1. Functions
 
 1.1 Roles
@@ -146,6 +148,7 @@
 - [electionsCandidateApplicationFee](#electionsCandidateApplicationFee)
 - [firstVotingCycleStartDate](#firstVotingCycleStartDate)
 
+</span>
 
 # Functions
 

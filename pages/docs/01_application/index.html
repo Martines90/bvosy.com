@@ -1,0 +1,167 @@
+<html>
+  <head>
+    <title></title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.10.0/github-markdown.min.css"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script type="text/javascript" id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+    </script>
+    <style>
+      body {
+        font-family: "Lato", sans-serif;
+      }
+
+      .nav-container {
+        width: 250px;
+      }
+
+      .sidenav {
+        height: 100%;
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: #111;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 60px;
+      }
+
+      .sidenav a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 25px;
+        color: #818181;
+        display: block;
+        transition: 0.3s;
+      }
+
+      .sidenav a:hover {
+        color: #f1f1f1;
+      }
+
+      .sidenav .closebtn {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+        margin-left: 50px;
+      }
+
+      @media screen and (max-height: 450px) {
+        .sidenav {
+          padding-top: 15px;
+        }
+        .sidenav a {
+          font-size: 18px;
+        }
+      }
+
+      mjx-container.MathJax > mjx-math {
+        float: left !important;
+        padding-right: 100% !important;
+        padding-bottom: 15px !important;
+      }
+
+      details summary {
+        background-color: #caacac;
+        padding: 5px;
+        padding-left: 15px;
+        font-weight: 500;
+        font-size: 22px;
+      }
+
+      .markdown-heading h2 {
+        border-bottom: 1px solid black;
+      }
+
+      .markdown-body > span .markdown-heading h2 {
+        border-bottom: unset;
+      }
+    </style>
+  </head>
+  <body class="markdown-body">
+    <div id="mySidenav" class="sidenav">
+      <div class="nav-container">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
+          >&times;</a
+        >
+        <a href="#">BVS Application (1.0)</a>
+        <a href="/pages/docs/03_contract/index.html">BVS Contract (1.0)</a>
+        <a href="/pages/docs/02_formulas/index.html">Formulas</a>
+        <a href="#">Terminology</a>
+        <a href="#">BVS (2.0)</a>
+      </div>
+    </div>
+    <span style="font-size: 30px; cursor: pointer" onclick="openNav()"
+      >&#9776; Documentation</span
+    >
+
+    <script>
+      function openNav() {
+        document.getElementById("mySidenav").style.width = "250px";
+      }
+
+      function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+      }
+    </script>
+<div class="markdown-heading"><h1 class="heading-element">BVS Application (1.0)</h1><a id="bvs-application-10" class="anchor" aria-label="Permalink: BVS Application (1.0)" href="#bvs-application-10"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<span>
+<div class="markdown-heading"><h2 class="heading-element">Introduction</h2><a id="introduction" class="anchor" aria-label="Permalink: Introduction" href="#introduction"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li><a href="#what-is-the-bvs">What is the BVS?</a></li>
+<li><a href="#what-is-the-bvs">Why BVS established on a blockchain technology?</a></li>
+<li><a href="#where-is-my-place">Where my journey starts in BVS?</a></li>
+</ul>
+<div class="markdown-heading"><h2 class="heading-element">First steps</h2><a id="first-steps" class="anchor" aria-label="Permalink: First steps" href="#first-steps"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li><a href="#start-a-srypto-wallet">Start a crypto wallet (Metamask)</a></li>
+<li><a href="#discover-the-community">Discover the community</a></li>
+<li><a href="#apply-for-citizenship">Apply for citizenship</a></li>
+</ul>
+<div class="markdown-heading"><h2 class="heading-element">User flows</h2><a id="user-flows" class="anchor" aria-label="Permalink: User flows" href="#user-flows"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>Visitor:</p>
+<ul>
+<li><a href="#apply-for-citizenship">Apply for citizenship</a></li>
+</ul>
+<p>Citizen:</p>
+<ul>
+<li><a href="#apply-for-elections">Apply for elections</a></li>
+<li><a href="#vote-on-candidates">Vote on candidates</a></li>
+<li><a href="#vote-on-voting">Vote on Voting</a></li>
+<li><a href="#read-and-complete-article">Read pro/con articles and complete quiz</a></li>
+<li><a href="#read-and-complete-article-response">Read article responses and complete quiz</a></li>
+</ul>
+<p>Political actor:</p>
+<ul>
+<li><a href="#start-new-voting">Start new voting</a></li>
+<li><a href="#publish-and-assign-aritcle-to-voting">Publish and assign article to voting</a></li>
+<li><a href="#publish-and-assign-reponse-to-article">Publish and assign response to article</a></li>
+<li><a href="#get-winner-voting-budget-money">Get winner voting budget money</a></li>
+</ul>
+<p>Administrator:</p>
+<ul>
+<li><a href="#manage-citizenship-application">Manage citizenship applications</a></li>
+<li><a href="#schedule-next-elections">Schedule next elections</a></li>
+<li><a href="#close-finished-elections">Close finished elections</a></li>
+<li><a href="#declare-first-voting-cycle-start-date">Declare first voting cycle start date</a></li>
+<li><a href="#assign-quiz-to-voting">Assign content check quiz to voting</a></li>
+<li><a href="#assign-quiz-to-article">Assign content check quiz to article</a></li>
+<li><a href="#assign-quiz-to-response">Assign content check quiz to response</a></li>
+<li><a href="#approve-voting">Approve voting</a></li>
+<li><a href="#grant-admin-role">Grant/revoke admin role</a></li>
+<li><a href="#revoke-citizen-role">Revoke citizen role</a></li>
+</ul>
+</span>
+<div class="markdown-heading"><h2 class="heading-element">Introduction</h2><a id="introduction-1" class="anchor" aria-label="Permalink: Introduction" href="#introduction-1"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element"><div id="what-is-the-bvs">What is the BVS?</div></h3><a id="what-is-the-bvs" class="anchor" aria-label="Permalink: What is the BVS?" href="#what-is-the-bvs"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+
+    </body>
+</html>
