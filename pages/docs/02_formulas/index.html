@@ -1,0 +1,150 @@
+<html>
+  <head>
+    <title></title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.10.0/github-markdown.min.css"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script type="text/javascript" id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+    </script>
+    <style>
+      body {
+        font-family: "Lato", sans-serif;
+      }
+
+      .sidenav {
+        height: 100%;
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: #111;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 60px;
+      }
+
+      .sidenav a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 25px;
+        color: #818181;
+        display: block;
+        transition: 0.3s;
+      }
+
+      .sidenav a:hover {
+        color: #f1f1f1;
+      }
+
+      .sidenav .closebtn {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+        margin-left: 50px;
+      }
+
+      @media screen and (max-height: 450px) {
+        .sidenav {
+          padding-top: 15px;
+        }
+        .sidenav a {
+          font-size: 18px;
+        }
+      }
+    </style>
+  </head>
+  <body class="markdown-body">
+    <div id="mySidenav" class="sidenav">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
+        >&times;</a
+      >
+      <a href="#">About</a>
+      <a href="#">Services</a>
+      <a href="#">Clients</a>
+      <a href="#">Contact</a>
+    </div>
+    <span style="font-size: 30px; cursor: pointer" onclick="openNav()"
+      >&#9776; Documentation</span
+    >
+
+    <script>
+      function openNav() {
+        document.getElementById("mySidenav").style.width = "250px";
+      }
+
+      function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+      }
+    </script>
+<div class="markdown-heading"><h1 class="heading-element">Formulas - "the math under the hood"</h1><a id="formulas---the-math-under-the-hood" class="anchor" aria-label="Permalink: Formulas - &quot;the math under the hood&quot;" href="#formulas---the-math-under-the-hood"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h2 class="heading-element">Voting</h2><a id="voting" class="anchor" aria-label="Permalink: Voting" href="#voting"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li><a href="#vote-score-formula">Vote Score Formula</a></li>
+<li><a href="#voting-win-formula">Voting Win Formula</a></li>
+<li><a href="#voting-cycle-formula">Voting Cycle Formula</a></li>
+</ul>
+<div class="markdown-heading"><h2 class="heading-element">Elections</h2><a id="elections" class="anchor" aria-label="Permalink: Elections" href="#elections"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li><a href="#elections-winner-formula">Election Winner(s) Formula</a></li>
+</ul>
+<div class="markdown-heading"><h2 class="heading-element">Content Check Quiz</h2><a id="content-check-quiz" class="anchor" aria-label="Permalink: Content Check Quiz" href="#content-check-quiz"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li><a href="#content-check-quiz-answers-indexes-formula">Content check quiz answer indexes</a></li>
+</ul>
+<div class="markdown-heading"><h2 class="heading-element">Roles</h2><a id="roles" class="anchor" aria-label="Permalink: Roles" href="#roles"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li><a href="#citizenship-grant-revoke-formula">Citizenship Grant/Revoke Formula</a></li>
+<li><a href="#administrator-role-grant-revoke-formula">Administrator Role Grant/Revoke Formula</a></li>
+</ul>
+<div class="markdown-heading"><h2 class="heading-element"><div id="vote-score-formula">(balanced) Vote Score Formula</div></h2><a id="balanced-vote-score-formula" class="anchor" aria-label="Permalink: (balanced) Vote Score Formula" href="#balanced-vote-score-formula"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Formula:</h3><a id="formula" class="anchor" aria-label="Permalink: Formula:" href="#formula"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>The weight of a vote calculated the following way:</p>
+<ul>
+<li>(sa) = number of supportive articles read</li>
+<li>(oa) = number of opposing articles read</li>
+<li>(sc) = comments made on supportive articles read</li>
+<li>(oc) = comments made on opposing articles read</li>
+</ul>
+<p>The <strong>Voting Score</strong> is calculated with the formula:</p>
+<p>$$\text{Voting Score} = 5 + \frac{(sa + oa - |sa - oa|)}{2} \times 25 + |sa - oa| \times 5 + \frac{(sc + oc - |sc - oc|)}{2} \times 10 + |sc - oc| \times 2 $$</p>
+<div class="markdown-heading"><h3 class="heading-element">Explanation:</h3><a id="explanation" class="anchor" aria-label="Permalink: Explanation:" href="#explanation"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>Voters have one vote / voting, but the value of their vote depends on the following factors:</p>
+<ul>
+<li>the voting content read (it is the minimum criteria to be eligible to vote)</li>
+<li>the amount of voting related articles (assigned by political actors) they read</li>
+<li>the ratio of pro/con articles</li>
+<li>the amount of article related responses they read</li>
+</ul>
+<p>Let's see some examples, how a voter voting score can vary depending on the above applied formula.</p>
+<p><strong>Example 1:</strong>
+You read the voting content and you read 2 pro article and 1 con article and the related responses then your voting score will be like:</p>
+<p><strong>calculation:</strong>
+$$\text{Voting Score} = $$
+$$ 5 \text{(for the reading of the voting content)} $$
+$$ + 5 * 5 \text{(for the reading of 1-1 pro and con article)} $$
+$$ + 5 \text{(for the reading one more pro article)} $$
+$$ + 3 + 3 + 3 \text{(all the 3 responses on the articles)} = 44. $$</p>
+<p><strong>Example 2:</strong>
+You read the voting content and you read 4 con articles and one response related to them.</p>
+<p><strong>calculation:</strong>
+$$\text{Voting Score} = $$
+$$ 5 \text{(for the reading of the voting content)} $$
+$$ + 5 + 5 + 5 + 5 \text{(for the individual con articles)} $$
+$$ + 3 \text{(for the one read response)} = 28. $$</p>
+<p><strong>Example 3:</strong>
+You read the voting content and you read 2 con and 2 pro articles and all the related responses to them.</p>
+<p><strong>calculation:</strong>
+$$\text{Voting Score} = $$
+$$ 5 \text{(for the reading of the voting content)} $$
+$$ + 5 * 5 + 5 * 5 \text{(for the 2-2 pro and con articles)} $$
+$$ + 3 + 3 + 3 + 3 \text{(for all the responses)} = 67. $$</p>
+
+    </body>
+</html>

@@ -1,4 +1,4 @@
-# BVS Smart Contract
+# BVS Smart Contract (1.0)
 
 **Blockchain network:** Solana<br>
 **Solidity version:** 0.8.9<br>
@@ -8,9 +8,9 @@
 
 1.1 Roles
 - [constructor](#constructor)
+- [applyForCitizenshipRole](#applyForCitizenshipRole)
 - [checkIfAccountHasRole](#checkIfAccountHasRole)
 - [_checkRole](#_checkRole)
-- [applyForCitizenshipRole](#applyForCitizenshipRole)
 - [grantCitizenRole](#grantCitizenRole)
 - [hasRole](#hasRole)
 - [revokeAdminRoleApproval](#revokeAdminRoleApproval)
@@ -18,6 +18,9 @@
 - [_revokeRole](#_revokeRole)
 - [_setupRole](#_setupRole)
 - [sendGrantAdministratorRoleApproval](#sendGrantAdministratorRoleApproval)
+- [getAdminsSize](#getAdminsSize)
+- [getCitizensSize](#getCitizensSize)
+- [getPoliticalActorsSize](#getPoliticalActorsSize)
 
 1.2 Update/add:
 - [addUpdateContact](#addUpdateContact)
@@ -29,16 +32,42 @@
 - [applyForElections](#applyForElections)
 - [voteOnElections](#voteOnElections)
 - [closeElections](#closeElections)
+- [getElectionCandidatesSize](#getElectionCandidatesSize)
+- [getElectionVotersSize](#getElectionVotersSize)
 
 1.4 Voting:
-- [voting](#voting)
+- [addKeccak256HashedAnswersToVotingContent](#addKeccak256HashedAnswersToVotingContent)
+- [approveVoting](#approveVoting)
+- [assignQuizIpfsHashToVoting](#assignQuizIpfsHashToVoting)
+- [calculateVoteScore](#calculateVoteScore)
+- [isVotingWon](#isVotingWon)
+- [scheduleNewVoting](#scheduleNewVoting)
+- [setFirstVotingCycleStartDate](#setFirstVotingCycleStartDate)
+- [unlockVotingBudget](#unlockVotingBudget)
+- [voteOnVoting](#voteOnVoting)
+- [getVoting](#getVoting)
+- [getVotingKeysLength](#getVotingKeysLength)
+- [getVotingCycleIndexesSize](#getVotingCycleIndexesSize)
 
-1.5 General:
-- [getAdminsSize](#getAdminsSize)
-- [getCitizensSize](#getCitizensSize)
-- [getPoliticalActorsSize](#getPoliticalActorsSize)
+1.5 Contents/quizzes:
+- [addKeccak256HashedAnswersToArticle](#addKeccak256HashedAnswersToArticle)
+- [addKeccak256HashedAnswersToArticleResponse](#addKeccak256HashedAnswersToArticleResponse)
+- [assignQuizIpfsHashToArticleOrResponse](#assignQuizIpfsHashToArticleOrResponse)
+- [completeContentReadQuiz](#completeContentReadQuiz)
+- [isContentReadQuizCorrect](#isContentReadQuizCorrect)
+- [publishProConArticle](#publishProConArticle)
+- [publishProConArticleResponse](#publishProConArticleResponse)
+- [getAccountArticleQuizAnswerIndexes](#getAccountArticleQuizAnswerIndexes)
+- [getAccountArticleResponseQuizAnswerIndexes](#getAccountArticleResponseQuizAnswerIndexes)
+- [getAccountQuizAnswerIndexes](#getAccountQuizAnswerIndexes)
+- [getAccountVotingQuizAnswerIndexes](#getAccountVotingQuizAnswerIndexes)
+- [getContentReadCheckAnswersLength](#getContentReadCheckAnswersLength)
+- [getArticleKeysLength](#getArticleKeysLength)
 
-1.6 Helpers
+1.6 General:
+- [getContactKeysSize](#getContactKeysSize)
+
+1.7 Helpers
 - [isEmptyString](#isEmptyString)
 
 
@@ -136,6 +165,23 @@ constructor() {
 ```
 Assigns deployer account the following roles (**CITIZEN**, **ADMININSTRATOR**) and declares creation date.
 
+
+### <div id="applyForCitizenshipRole">applyForCitizenshipRole</div>
+
+input props:
+- **_emailPublicKeyCombinedHash**: the unique hash generated from the account personal data for later identification.
+
+validation checks:
+- minCitizenshipApplicationFeeCovered: checks if transaction value bigger than the application fee
+```solidity
+function applyForCitizenshipRole(
+    bytes32 _emailPublicKeyCombinedHash
+) public payable minCitizenshipApplicationFeeCovered {
+    citizenshipApplications[msg.sender] = _emailPublicKeyCombinedHash;
+}
+```
+Registers user citizenship application.
+
 ### <div id="checkIfAccountHasRole">checkIfAccountHasRole</div>
 input props:
 - _account: account address
@@ -166,22 +212,6 @@ function _checkRole(bytes32 role, address account) internal view virtual {
 ```
 Checks if account has the specified role.
 
-
-### <div id="applyForCitizenshipRole">applyForCitizenshipRole</div>
-
-input props:
-- **_emailPublicKeyCombinedHash**: the unique hash generated from the account personal data for later identification.
-
-validation checks:
-- minCitizenshipApplicationFeeCovered: checks if transaction value bigger than the application fee
-```solidity
-function applyForCitizenshipRole(
-    bytes32 _emailPublicKeyCombinedHash
-) public payable minCitizenshipApplicationFeeCovered {
-    citizenshipApplications[msg.sender] = _emailPublicKeyCombinedHash;
-}
-```
-Registers user citizenship application.
 
 ### <div id="grantCitizenRole">grantCitizenRole</div>
 input props:
@@ -363,6 +393,31 @@ function sendGrantAdministratorRoleApproval(
 ```
 
 
+### <div id="getAdminsSize">getAdminsSize</div>
+```solidity
+function getAdminsSize() public view returns (uint) {
+    return admins.length;
+}
+```
+Returns the number of **ADMINISTRATORS**
+
+### <div id="getCitizensSize">getCitizensSize</div>
+```solidity
+function getCitizensSize() public view returns (uint) {
+    return citizens.length;
+}
+```
+Returns the number of **CITIZENS**
+
+### <div id="getPoliticalActorsSize">getPoliticalActorsSize</div>
+```solidity
+function getPoliticalActorsSize() public view returns (uint) {
+    return politicalActors.length;
+}
+```
+Returns the number of **POLITICAL_ACTORS**
+
+
 ## Functions > Update/add global variables:
 
 ### <div id="addUpdateContact">addUpdateContact</div>
@@ -537,35 +592,880 @@ function closeElections() public onlyRole(ADMINISTRATOR) canCloseElections {
 ```
 Decides which candidates have enough number of votes and calculates for them the voting and article publishing credits for the voting cycles and also grants for them **POLITICAL_ACTOR** role.
 
+### <div id="getElectionCandidatesSize">getElectionCandidatesSize</div>
+
+```solidity
+function getElectionCandidatesSize() public view returns (uint256) {
+    return electionCandidates.length;
+}
+```
+Returns the number of candidates who applied for elections.
+
+### <div id="getElectionVotersSize">getElectionVotersSize</div>
+
+```solidity
+function getElectionVotersSize() public view returns (uint256) {
+    return electionVoters.length;
+}
+```
+Returns the number of voters who voted on elections.
+
 ## Functions > Voting
 
+### <div id="addKeccak256HashedAnswersToVotingContent">addKeccak256HashedAnswersToVotingContent</div>
 
+input props:
+- **_votingKey**: the key identify a voting
+- **_keccak256HashedAnswers**: the hashed answers for content validation
+
+validation checks:
+- only **ADMINISTRATOR**
+- **votingContentQuizIpfsAssigned**: if the content check quiz ipfs reference already assigned.
+- **enoughContentReadQuizAnswerAdded**: the number of questions passed has to be more than the minimum.
+```solidity
+function addKeccak256HashedAnswersToVotingContent(
+    bytes32 _votingKey,
+    bytes32[] memory _keccak256HashedAnswers
+)
+    public
+    onlyRole(ADMINISTRATOR)
+    votingContentQuizIpfsAssigned(_votingKey)
+    enoughContentReadQuizAnswerAdded(_keccak256HashedAnswers)
+{
+    votingContentReadCheckAnswers[_votingKey] = _keccak256HashedAnswers;
+}
+```
+
+### <div id="approveVoting">approveVoting</div>
+input props:
+- **_votingKey**: the key identify a voting
+
+validation checks:
+- only **ADMINISTRATOR**
+- **votingNotYetStarted**: voting has to be ongoing
+- **approveAttempt3DaysBeforeVotingStarts**: Make sure the voting approval attempt within 3 days of voting start
+- **enoughContentReadQuizAnswerAdded**: There are assigned content check answers
+- **creatorOfVotingRespondedOnArticles**: The voting owner responded on the assigned pro/con articles
+
+```solidity
+function approveVoting(
+    bytes32 _votingKey
+)
+    public
+    onlyRole(ADMINISTRATOR)
+    votingNotYetStarted(_votingKey)
+    approveAttempt3DaysBeforeVotingStarts(_votingKey)
+    enoughContentReadQuizAnswerAdded(
+        votingContentReadCheckAnswers[_votingKey]
+    )
+    creatorOfVotingRespondedOnArticles(_votingKey)
+{
+    votings[_votingKey].approved = true;
+}
+```
+Approves a scheduled upcoming voting.
+
+### <div id="assignQuizIpfsHashToVoting">assignQuizIpfsHashToVoting</div>
+input props:
+- **_votingKey**: the key identify a voting
+- **_quizIpfsHash**: the ipfs reference related to the document contains the assigned questions.
+
+validation checks:
+- only **ADMINISTRATOR**
+- **votingExists**: checks if voting exists
+
+```solidity
+function assignQuizIpfsHashToVoting(
+    bytes32 _votingKey,
+    string memory _quizIpfsHash
+) public onlyRole(ADMINISTRATOR) votingExists(_votingKey) {
+    votings[_votingKey].votingContentCheckQuizIpfsHash = _quizIpfsHash;
+}
+```
+Assign all the content check quiz ipfs reference related to a scheduled voting.
+
+### <div id="calculateVoteScore">calculateVoteScore</div>
+input props:
+- **_votingKey**: the key identify a voting
+- **_account**: account address of the **CITIZEN**
+
+```solidity
+function calculateVoteScore(
+    bytes32 _votingKey,
+    address _account
+) public view returns (uint) {
+    uint voteScore = MIN_VOTE_SCORE;
+
+    uint completedArticlesLength = articlesCompleted[_account].length;
+
+    uint numOfVoteOnACompletedArticleValue = 0;
+    uint numOfVoteOnBCompletedArticleValue = 0;
+
+    uint numOfVoteOnACompletedResponseValue = 0;
+    uint numOfVoteOnBCompletedResponseValue = 0;
+
+    for (uint i = 0; i < completedArticlesLength; i++) {
+        ProConArticle memory completedProConArticle = proConArticles[
+            _votingKey
+        ][articlesCompleted[_account][i]];
+        if (completedProConArticle.votingKey == _votingKey) {
+            if (completedProConArticle.isVoteOnA) {
+                numOfVoteOnACompletedArticleValue += 1;
+            } else {
+                numOfVoteOnBCompletedArticleValue += 1;
+            }
+        }
+    }
+
+    uint completedArticlesResponseLength = articlesResponseCompleted[
+        _account
+    ].length;
+    for (uint u = 0; u < completedArticlesResponseLength; u++) {
+        ProConArticle
+            memory completedProConArticleWithResponse = proConArticles[
+                _votingKey
+            ][articlesResponseCompleted[_account][u]];
+        if (completedProConArticleWithResponse.votingKey == _votingKey) {
+            if (completedProConArticleWithResponse.isVoteOnA) {
+                numOfVoteOnACompletedResponseValue += 1;
+            } else {
+                numOfVoteOnBCompletedResponseValue += 1;
+            }
+        }
+    }
+
+    uint noPairArticleCompleteCount = 0;
+
+    if (
+        numOfVoteOnACompletedArticleValue >
+        numOfVoteOnBCompletedArticleValue
+    ) {
+        noPairArticleCompleteCount = (numOfVoteOnACompletedArticleValue -
+            numOfVoteOnBCompletedArticleValue);
+    } else {
+        noPairArticleCompleteCount = (numOfVoteOnBCompletedArticleValue -
+            numOfVoteOnACompletedArticleValue);
+    }
+
+    voteScore +=
+        ((numOfVoteOnACompletedArticleValue +
+            numOfVoteOnBCompletedArticleValue -
+            noPairArticleCompleteCount) / 2) *
+        25 +
+        (noPairArticleCompleteCount * 5);
+
+    // add the balanced way calculated scores after completed responses
+    uint noPairResponseCompleteCount = 0;
+
+    if (
+        numOfVoteOnACompletedResponseValue >
+        numOfVoteOnBCompletedResponseValue
+    ) {
+        noPairResponseCompleteCount = (numOfVoteOnACompletedResponseValue -
+            numOfVoteOnBCompletedResponseValue);
+    } else {
+        noPairResponseCompleteCount = (numOfVoteOnBCompletedResponseValue -
+            numOfVoteOnACompletedResponseValue);
+    }
+
+    voteScore +=
+        ((numOfVoteOnACompletedResponseValue +
+            numOfVoteOnBCompletedResponseValue -
+            noPairResponseCompleteCount) / 2) *
+        10 +
+        (noPairResponseCompleteCount * 2);
+
+    return voteScore;
+}
+```
+Calculates the total voting score of a **CITIZEN**, considering all the "completed" (read) articles, article related responses, pro : con ratio.
+
+### <div id="isVotingWon">isVotingWon</div>
+
+input props:
+- **_votingKey**: identifies the voting.
+
+validation checks:
+- **votingNotFinished**: voting not finished yet
+- **votingApproved**: voting approved
+- **enoughVotesArrived**: enough votes arrived
+
+```solidity
+function isVotingWon(
+    bytes32 _votingKey
+)
+    public
+    view
+    votingNotFinished(_votingKey)
+    votingApproved(_votingKey)
+    enoughVotesArrived(_votingKey)
+    returns (bool)
+{
+    return
+        votings[_votingKey].voteOnAScore >=
+        votings[_votingKey].voteOnBScore;
+}
+```
+Checks if the actual voting win or lose.
+
+### <div id="scheduleNewVoting">scheduleNewVoting</div>
+input props:
+- **_contentIpfsHash**: the ipfs hash reference of the voting's content
+- **_startDate**: when the voting can start
+- **_budget**: target budget of the voting
+
+validation checks:
+- only **POLITICAL_ACTOR**
+- **votingPeriodIsActive**: Checks if the actual voting period is ongoing
+- **newVotingScheduledAtLeast10daysAhead**: The start date of the voting is 10 days or more from now.
+- **newVotingScheduledMaximum30daysAhead**: The start date of the voting is 30 days or less from now.
+
+```solidity
+function scheduleNewVoting(
+    string calldata _contentIpfsHash,
+    uint _startDate,
+    uint _budget
+)
+    public
+    onlyRole(POLITICAL_ACTOR)
+    votingPeriodIsActive
+    newVotingScheduledAtLeast10daysAhead(_startDate)
+    newVotingScheduledMaximum30daysAhead(_startDate)
+{
+    uint timePassed = block.timestamp - firstVotingCycleStartDate;
+    uint votingCycleCount = uint(timePassed / VOTING_CYCLE_INTERVAL);
+
+    if (
+        timePassed - votingCycleCount * VOTING_CYCLE_INTERVAL >
+        VOTING_CYCLE_INTERVAL - NEW_VOTING_PERIOD_MIN_SCHEDULE_AHEAD_TIME
+    ) {
+        revert CantStartNewVointg10daysOrLessBeforeEndOfCycle();
+    }
+
+    if (
+        politicalActorVotingCredits[msg.sender] <=
+        votingCycleStartVoteCount[votingCycleCount][msg.sender]
+    ) {
+        revert AccountRanOutOfVotingCreditsForThisVotingCycle();
+    }
+
+    votingCycleStartVoteCount[votingCycleCount][msg.sender]++;
+
+    bytes32 _votingKey = keccak256(
+        abi.encodePacked(block.timestamp, msg.sender, _contentIpfsHash)
+    );
+
+    votings[_votingKey].budget = _budget;
+    votings[_votingKey].key = _votingKey;
+    votings[_votingKey].creator = msg.sender;
+    votings[_votingKey].contentIpfsHash = _contentIpfsHash;
+    votings[_votingKey].startDate = _startDate;
+    votings[_votingKey].voteOnAScore = 0;
+    votings[_votingKey].voteOnBScore = 0;
+    votings[_votingKey].actualNumberOfCitizens = citizens.length;
+
+    bool votingCycleIndexAlreadyAdded = false;
+    for (uint i = 0; i < votingCycleIndexes.length; i++) {
+        if (votingCycleCount == votingCycleIndexes[i]) {
+            votingCycleIndexAlreadyAdded = true;
+            break;
+        }
+    }
+
+    if (!votingCycleIndexAlreadyAdded) {
+        votingCycleIndexes.push(votingCycleCount);
+    }
+
+    votingKeys.push(_votingKey);
+}
+```
+**POLITICAL_ACTOR** by using 1 voting start credit can schedule new voting in the actual ongoing voting period.
+
+### <div id="setFirstVotingCycleStartDate">setFirstVotingCycleStartDate</div>
+
+input props:
+- **_firstVotingCycleStartDate**: the first voting cycle start date
+
+validation checks:
+- only **ADMINISTRATOR**
+- **firstVotingCycleStartDateIsInTheFuture**: Checks if the first voting cycle start date is in the future.
+
+```solidity
+function setFirstVotingCycleStartDate(
+    uint _firstVotingCycleStartDate
+)
+    public
+    onlyRole(ADMINISTRATOR)
+    firstVotingCycleStartDateIsInTheFuture(_firstVotingCycleStartDate)
+{
+    // reset votingCycleStartVoteCount;
+    for (uint i = 0; i < votingCycleIndexes.length; i++) {
+        for (uint u = 0; u < politicalActors.length; u++) {
+            delete votingCycleStartVoteCount[votingCycleIndexes[i]][
+                politicalActors[u]
+            ];
+        }
+    }
+
+    votingCycleIndexes = new uint[](0);
+
+    firstVotingCycleStartDate = _firstVotingCycleStartDate;
+}
+```
+**ADMINISTRATOR** can declare the beginning date of the voting cycles start. After that cycles repeat in a fixed 30 days interval.
+
+### <div id="unlockVotingBudget">unlockVotingBudget</div>
+input props:
+- **_votingKey**: identifies the voting.
+
+validation checks:
+- only **POLITICAL_ACTOR**
+- **votingBelongsToSender**: voting belongs to the sender (who created the voting) address 
+- **votingWon**: if voting won (option A get more than 50% of votes).
+
+```solidity
+function unlockVotingBudget(
+    bytes32 _votingKey
+)
+    public
+    onlyRole(POLITICAL_ACTOR)
+    votingBelongsToSender(_votingKey)
+    votingWon(_votingKey)
+{
+    (bool callSuccess, ) = payable(msg.sender).call{
+        value: getVoting(_votingKey).budget
+    }("");
+    if (!callSuccess) {
+        revert();
+    }
+
+    votings[_votingKey].budget = 0; // make sure no more money can be requested
+}
+```
+**POLITICAL_ACTOR** can unlock his voting target budget and get the amount of crypto he asked for.
+
+### <div id="voteOnVoting">voteOnVoting</div>
+
+input props:
+- **_votingKey**: identifies the voting.
+- **_voteOnA**: vote on A (yes) or B (no).
+
+validation checks:
+- only **CITIZEN**
+- **votingIsOngoing**: voting has to ongoing
+- **votingApproved**: voting approved (by **ADMINISTRATOR**)
+- **contentCheckQuizCompleted**: vote minimal requirement, the content read check quiz is completed (by the voter)
+- **notVotedYetOnThisVoting**: voter not voted already
+
+```solidity
+function voteOnVoting(
+    bytes32 _votingKey,
+    bool _voteOnA
+)
+    public
+    onlyRole(CITIZEN)
+    votingIsOngoing(_votingKey)
+    votingApproved(_votingKey)
+    contentCheckQuizCompleted(_votingKey)
+    notVotedYetOnThisVoting(_votingKey)
+{
+    // calculate vote score
+    uint voteScore = calculateVoteScore(_votingKey, msg.sender);
+
+    // add new vote
+    if (_voteOnA) {
+        votings[_votingKey].voteOnAScore += voteScore;
+    } else {
+        votings[_votingKey].voteOnBScore += voteScore;
+    }
+
+    votings[_votingKey].voteCount++;
+    votes[msg.sender][_votingKey].voted = true;
+}
+```
+**CITIZEN** can vote on an ongoing voting.
+
+
+### <div id="getVoting">getVoting</div>
+input props:
+- **_votingKey**: identifies the voting.
+
+```solidity
+function getVoting(bytes32 _votingKey) public view returns (Voting memory) {
+    return votings[_votingKey];
+}
+```
+Returns specific voting.
+
+### <div id="getVotingKeysLength">getVotingKeysLength</div>
+```solidity
+function getVotingKeysLength() public view returns (uint) {
+    return votingKeys.length;
+}
+```
+Returns the number of votings (voting keys) exists.
+
+### <div id="getVotingCycleIndexesSize">getVotingCycleIndexesSize</div>
+```solidity
+function getVotingCycleIndexesSize() public view returns (uint) {
+    return votingCycleIndexes.length;
+}
+```
+Returns the voting number of cycle indexes.
+
+## Functions > Contents/quizzes
+
+### <div id="addKeccak256HashedAnswersToArticle">addKeccak256HashedAnswersToArticle</div>
+
+input props:
+- **_votingKey**: identifies the voting.
+- **_articleKey**: identifies the article assigned to voting
+- **_keccak256HashedAnswers**: article content check quiz hashed answers
+
+validation checks:
+- only **ADMINISTRATOR**
+- **hasArticleContentIpfsHashAssigned**: has ipfs content check document ipfs hash reference assigned to the article
+- **enoughContentReadQuizAnswerAdded**: number of passed answers meet with minimum answer requirement.
+
+```solidity
+function addKeccak256HashedAnswersToArticle(
+    bytes32 _votingKey,
+    bytes32 _articleKey,
+    bytes32[] memory _keccak256HashedAnswers
+)
+    public
+    onlyRole(ADMINISTRATOR)
+    hasArticleContentIpfsHashAssigned(_votingKey, _articleKey)
+    enoughContentReadQuizAnswerAdded(_keccak256HashedAnswers)
+{
+    proConArticles[_votingKey][_articleKey].isArticleApproved = true;
+    articleContentReadCheckAnswers[_articleKey] = _keccak256HashedAnswers;
+}
+```
+**ADMINISTRATOR** can add N number of answer hashes related article content check.
+
+### <div id="addKeccak256HashedAnswersToArticleResponse">addKeccak256HashedAnswersToArticleResponse</div>
+
+
+input props:
+- **_votingKey**: identifies the voting.
+- **_articleKey**: identifies the article's response assigned to article
+- **_keccak256HashedAnswers**: article's response content check quiz hashed answers
+
+validation checks:
+- only **ADMINISTRATOR**
+- **articleShouldExists**: article should exists
+- **hasArticleResponseAssigned**: article response exists
+- **hasArticleResponseContentCheckIpfsHash**: article response content check ipfs hash reference assigned
+- **votingNotYetStarted**: voting not started yet
+- **enoughContentReadQuizAnswerAdded**: the number of passed answers met with minimum requirement
+
+```solidity
+function addKeccak256HashedAnswersToArticleResponse(
+    bytes32 _votingKey,
+    bytes32 _articleKey,
+    bytes32[] memory _keccak256HashedAnswers
+)
+    public
+    onlyRole(ADMINISTRATOR)
+    articleShouldExists(_votingKey, _articleKey)
+    hasArticleResponseAssigned(_votingKey, _articleKey)
+    hasArticleResponseContentCheckIpfsHash(_votingKey, _articleKey)
+    votingNotYetStarted(_votingKey)
+    enoughContentReadQuizAnswerAdded(_keccak256HashedAnswers)
+{
+    articleContentResponseReadCheckAnswers[
+        _articleKey
+    ] = _keccak256HashedAnswers;
+    proConArticles[_votingKey][_articleKey].isResponseApproved = true;
+}
+```
+**ADMINISTRATOR** can assign to article response content check quiz related answers
+
+### <div id="assignQuizIpfsHashToArticleOrResponse">assignQuizIpfsHashToArticleOrResponse</div>
+
+input props:
+- **_votingKey**: identifies the voting.
+- **_articleKey**: identifies the article assigned to voting
+- **_quizIpfsHash**: quiz ipfs hash reference
+- **assignToArticleContent**: decides if ipfs hash goes to a article or a article response
+
+validation checks:
+- only **ADMINISTRATOR**
+- **articleShouldExists**: article should exists
+
+```solidity
+function assignQuizIpfsHashToArticleOrResponse(
+    bytes32 _votingKey,
+    bytes32 _articleKey,
+    string memory _quizIpfsHash,
+    bool assignToArticleContent
+)
+    public
+    onlyRole(ADMINISTRATOR)
+    articleShouldExists(_votingKey, _articleKey)
+{
+    if (assignToArticleContent) {
+        proConArticles[_votingKey][_articleKey]
+            .articleContentCheckQuizIpfsHash = _quizIpfsHash;
+    } else {
+        proConArticles[_votingKey][_articleKey]
+            .responseContentCheckQuizIpfsHash = _quizIpfsHash;
+    }
+}
+```
+**ADMINISTRATOR** assigns ipfs hash quiz document to article or response.
+
+### <div id="completeContentReadQuiz">completeContentReadQuiz</div>
+
+
+input props:
+- **contentType**: identifies voting content, article or article response.
+- **_votingKey**: identifies the voting.
+- **_articleKey**: identifies the article assigned to voting
+- **_answers**: content check answer hashes.
+
+validation checks:
+- only **CITIZEN**
+
+```solidity
+function completeContentReadQuiz(
+    uint contentType,
+    bytes32 _votingKey,
+    bytes32 _articleKey,
+    string[] memory _answers
+) public onlyRole(CITIZEN) {
+    uint[] memory answerIndexes;
+    bool isCorrect;
+
+    // voting
+    if (contentType == 1) {
+        answerIndexes = getAccountVotingQuizAnswerIndexes(
+            _votingKey,
+            msg.sender
+        );
+
+        isCorrect = isContentReadQuizCorrect(
+            answerIndexes,
+            votingContentReadCheckAnswers[_votingKey],
+            _answers
+        );
+        votes[msg.sender][_votingKey].isContentCompleted = true;
+    }
+    // article
+    else if (contentType == 2) {
+        answerIndexes = getAccountArticleQuizAnswerIndexes(
+            _votingKey,
+            _articleKey,
+            msg.sender
+        );
+
+        isCorrect = isContentReadQuizCorrect(
+            answerIndexes,
+            articleContentReadCheckAnswers[_articleKey],
+            _answers
+        );
+        articlesCompleted[msg.sender].push(_articleKey);
+        // article respond
+    } else if (contentType == 3) {
+        answerIndexes = getAccountArticleResponseQuizAnswerIndexes(
+            _votingKey,
+            _articleKey,
+            msg.sender
+        );
+
+        isCorrect = isContentReadQuizCorrect(
+            answerIndexes,
+            articleContentResponseReadCheckAnswers[_articleKey],
+            _answers
+        );
+
+        articlesResponseCompleted[msg.sender].push(_articleKey);
+    }
+
+    require(isCorrect, "Some of your provided answers are wrong");
+}
+```
+**CITIZEN** can complete any kind of voting or article or article response related content check quiz by providing the correct answers.
+
+### <div id="isContentReadQuizCorrect">isContentReadQuizCorrect</div>
+
+input props:
+- **_answerIndexes**: the indexes of answers
+- **_readCheckAnswers**: the answers related to the content quiz
+- **_answers**: **CITIZEN** provided answers
+
+validation checks:
+- only **CITIZEN**
+
+```solidity
+function isContentReadQuizCorrect(
+    uint[] memory _answerIndexes,
+    bytes32[] memory _readCheckAnswers,
+    string[] memory _answers
+) public view onlyRole(CITIZEN) returns (bool) {
+    bool areAnswersCorrect = true;
+
+    for (uint i = 0; i < _answerIndexes.length; i++) {
+        if (
+            _readCheckAnswers[_answerIndexes[i] - 1] !=
+            keccak256(bytes(_answers[i]))
+        ) {
+            areAnswersCorrect = false;
+        }
+    }
+
+    return areAnswersCorrect;
+}
+```
+Checks if related to any content quiz answers the **CITIZEN** provided answers are correct.
+
+### <div id="publishProConArticle">publishProConArticle</div>
+
+input props:
+- **_votingKey**: identifies the voting.
+- **_ipfsHash**: article's content ipfs hash
+- **_isVoteOnA**: article supported voting outcome
+
+validation checks:
+- only **POLITICAL_ACTOR**
+- **hasCreditsLeftToPublishArticle**: **POLITICAL_ACTOR** has to have article publish credits left
+
+```solidity
+function publishProConArticle(
+    bytes32 _votingKey,
+    string memory _ipfsHash,
+    bool _isVoteOnA
+)
+    public
+    onlyRole(POLITICAL_ACTOR)
+    hasCreditsLeftToPublishArticle(_votingKey)
+{
+    bytes32 articleKey = keccak256(
+        abi.encodePacked(block.timestamp, msg.sender, _ipfsHash)
+    );
+
+    proConArticles[_votingKey][articleKey] = ProConArticle(
+        _votingKey,
+        false,
+        false,
+        msg.sender,
+        _ipfsHash,
+        _isVoteOnA,
+        "",
+        "",
+        ""
+    );
+    articleKeys.push(articleKey);
+    publishArticleToVotingsCount[msg.sender][_votingKey]++;
+}
+```
+**POLITICAL_ACTOR** cab publish to a specified ongoing voting a pro/con article.
+
+### <div id="publishProConArticleResponse">publishProConArticleResponse</div>
+
+input props:
+- **contentType**: identifies voting content, article or article response.
+- **_votingKey**: identifies the voting.
+- **_proConArticleKey**: identifies the article
+- **_ipfsHash**: ipfs hash reference of the response content
+
+validation checks:
+- only **POLITICAL_ACTOR**
+- **votingNotYetStarted**: voting not yet started
+- **criticisedArticleRelatedToYourVoting**: article related to the voting you own.
+
+```solidity
+function publishProConArticleResponse(
+    bytes32 _votingKey,
+    bytes32 _proConArticleKey,
+    string memory _ipfsHash
+)
+    public
+    onlyRole(POLITICAL_ACTOR)
+    votingNotYetStarted(_votingKey)
+    criticisedArticleRelatedToYourVoting(_votingKey, _proConArticleKey)
+{
+    proConArticles[_votingKey][_proConArticleKey]
+        .responseStatementIpfsHash = _ipfsHash;
+}
+```
+**POLITICAL_ACTOR** can publish his response on articles assigned to his scheduled voting.
+
+### <div id="getAccountArticleQuizAnswerIndexes">getAccountArticleQuizAnswerIndexes</div>
+
+input props:
+- **_votingKey**: identifies the voting
+- **_articleKey**: identifies the article assigned to voting
+- **_account**: account address
+
+```solidity
+function getAccountArticleQuizAnswerIndexes(
+    bytes32 _votingKey,
+    bytes32 _articleKey,
+    address _account
+) public view returns (uint[] memory) {
+    return
+        getAccountQuizAnswerIndexes(
+            proConArticles[_votingKey][_articleKey]
+                .articleContentCheckQuizIpfsHash,
+            proConArticles[_votingKey][_articleKey].articleIpfsHash,
+            votings[_votingKey].startDate,
+            articleContentReadCheckAnswers[_articleKey].length,
+            CONTENT_CHECK_ASKED_NUM_OF_QUESTIONS,
+            _account
+        );
+}
+```
+Returns the account uniquely related combination answer indexes what assigned to article content.
+
+### <div id="getAccountArticleResponseQuizAnswerIndexes">getAccountArticleResponseQuizAnswerIndexes</div>
+input props:
+- **_votingKey**: identifies the voting
+- **_articleKey**: identifies the article assigned to voting
+- **_account**: account address
+
+```solidity
+function getAccountArticleResponseQuizAnswerIndexes(
+    bytes32 _votingKey,
+    bytes32 _articleKey,
+    address _account
+) public view returns (uint[] memory) {
+    return
+        getAccountQuizAnswerIndexes(
+            proConArticles[_votingKey][_articleKey]
+                .responseContentCheckQuizIpfsHash,
+            proConArticles[_votingKey][_articleKey]
+                .responseStatementIpfsHash,
+            votings[_votingKey].startDate,
+            articleContentResponseReadCheckAnswers[_articleKey].length,
+            CONTENT_CHECK_ASKED_NUM_OF_QUESTIONS,
+            _account
+        );
+}
+```
+Returns the account uniquely related combination answer indexes what assigned to article response content.
+
+### <div id="getAccountQuizAnswerIndexes">getAccountQuizAnswerIndexes</div>
+input props:
+- **ipfsHash1**: ipfs hash reference of the content
+- **ipfsHash2**: ipfs hash reference of the content check quiz
+- **_date**: date of the block
+- **_numOfTotalQuestions**:  number of the total questions assigned to the content check
+- **_numOfQuiestionsToAsk**: number of questions to ask from the account
+- **_account**: account address
+
+```solidity
+function getAccountQuizAnswerIndexes(
+    string memory ipfsHash1,
+    string memory ipfsHash2,
+    uint _date,
+    uint _numOfTotalQuestions,
+    uint _numOfQuiestionsToAsk,
+    address _account
+) internal pure returns (uint[] memory) {
+    bytes32 hashCode = keccak256(
+        abi.encodePacked(ipfsHash1, ipfsHash2, _account)
+    );
+
+    uint numOfVotingQuizQuestions = uint(_numOfTotalQuestions);
+
+    uint[] memory questionsToAsk = new uint[](_numOfQuiestionsToAsk);
+
+    uint countAddedQuestions = 0;
+    for (
+        uint i = uint(_date % numOfVotingQuizQuestions);
+        countAddedQuestions < _numOfQuiestionsToAsk;
+        i++
+    ) {
+        uint questionNth = (uint8(hashCode[i]) % numOfVotingQuizQuestions) +
+            1;
+
+        uint u = 0;
+        do {
+            if (questionsToAsk[u] == questionNth) {
+                questionNth++;
+                u = 0;
+                if (questionNth > numOfVotingQuizQuestions) {
+                    questionNth = 1;
+                }
+            } else {
+                u++;
+            }
+        } while (u < countAddedQuestions);
+
+        questionsToAsk[countAddedQuestions] = questionNth;
+        countAddedQuestions++;
+    }
+
+    return questionsToAsk;
+}
+```
+Get the unique combination indexes of article or article response related content check.
+
+### <div id="getAccountVotingQuizAnswerIndexes">getAccountVotingQuizAnswerIndexes</div>
+
+input props:
+- **_votingKey**: identifies the voting
+- **_account**: account address
+
+```solidity
+function getAccountVotingQuizAnswerIndexes(
+    bytes32 _votingKey,
+    address _account
+) public view returns (uint[] memory) {
+    return
+        getAccountQuizAnswerIndexes(
+            votings[_votingKey].votingContentCheckQuizIpfsHash,
+            votings[_votingKey].contentIpfsHash,
+            votings[_votingKey].startDate,
+            votingContentReadCheckAnswers[_votingKey].length,
+            CONTENT_CHECK_ASKED_NUM_OF_QUESTIONS,
+            _account
+        );
+}
+```
+Returns the content check quiz indexes related to voting content.
+
+### <div id="getContentReadCheckAnswersLength">getContentReadCheckAnswersLength</div>
+input props:
+- **key**: content identify key
+- **contentType**: defines the content type (voting, article, response)
+```solidity
+function getContentReadCheckAnswersLength(
+    bytes32 key,
+    uint contentType
+) public view returns (uint) {
+    // voting
+    if (contentType == 1) {
+        return votingContentReadCheckAnswers[key].length;
+    } else if (contentType == 2) {
+        return articleContentReadCheckAnswers[key].length;
+    } else {
+        return articleContentResponseReadCheckAnswers[key].length;
+    }
+}
+```
+Returns any kind of content related answer indexes.
+
+### <div id="getArticleKeysLength">getArticleKeysLength</div>
+
+```solidity
+function getArticleKeysLength() public view returns (uint) {
+    return articleKeys.length;
+}
+```
+Returns the number of articles (article keys).
 
 ## Functions > General
 
-### <div id="getAdminsSize">getAdminsSize</div>
+### <div id="getContactKeysSize">getContactKeysSize</div>
 ```solidity
-function getAdminsSize() public view returns (uint) {
-    return admins.length;
+function getContactKeysSize() public view returns (uint256) {
+    return contactKeys.length;
 }
 ```
-Returns the number of **ADMINISTRATORS**
-
-### <div id="getCitizensSize">getCitizensSize</div>
-```solidity
-function getCitizensSize() public view returns (uint) {
-    return citizens.length;
-}
-```
-Returns the number of **CITIZENS**
-
-### <div id="getPoliticalActorsSize">getPoliticalActorsSize</div>
-```solidity
-function getPoliticalActorsSize() public view returns (uint) {
-    return politicalActors.length;
-}
-```
-Returns the number of **POLITICAL_ACTORS**
+Returns the number of contacts (contact keys) assigned to contract.
 
 ## Functions > helpers
 
@@ -1026,7 +1926,7 @@ Checks if the voting period is declared and also ongoing.
 
 ```solidity
 modifier votingWon(bytes32 _votingKey) {
-    if (!isVotingWon(_votingKey, true)) {
+    if (!isVotingWon(_votingKey)) {
         revert VotingDidNotWon();
     }
     _;
